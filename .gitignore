@@ -109,3 +109,4 @@ UpgradeLog*.XML
 /.vs/FastColoredTextBox/v15/Server/sqlite3
 /NuGet Output
 /.vs/Sara-FCTB/v15/Server/sqlite3
+.vs
