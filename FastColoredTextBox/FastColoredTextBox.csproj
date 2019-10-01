@@ -142,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FCTB_key.snk" />
-    <None Include="Sara-FCTB.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />
@@ -150,28 +149,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if $(ConfigurationName) == Release (
-
-  if not exist "$(SolutionDir)NuGet Output" mkdir "$(SolutionDir)NuGet Output"
-
-  cd $(SolutionDir)
-  echo ---Packing
-  nuget pack $(ProjectDir)Sara-FCTB.nuspec -OutputDirectory "$(SolutionDir)NuGet Output"
-
-  :: The following is for a local copy of the NuGet Repository
-  echo ---Reminder: The version in Sara-FCTB.nuspec must match the FastColoredTextBox version.
-  echo ---Deploying local NuGet Repository
-  if exist "E:\Nuget Output" (
-    echo ---Copying Package
-    copy "$(SolutionDir)NuGet Output\Sara-FCTB.2.16.26.100.nupkg" "E:\NuGet Output\"
-    
-    echo ---Initialize local NuGet Repository
-    rd /s/q "E:\NuGet Repository"
-    mkdir "E:\NuGet Repository"
-    nuget init "E:\Nuget Output" "E:\Nuget Repository"
-    echo ---Complete..
-  )
-)</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
