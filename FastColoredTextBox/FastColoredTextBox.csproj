@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FastColoredTextBoxNS</RootNamespace>
     <AssemblyName>FastColoredTextBox</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <WarningLevel>0</WarningLevel>
     <DocumentationFile>bin\Debug\FastColoredTextBox.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -53,12 +53,16 @@
     </Compile>
     <Compile Include="Bookmarks.cs" />
     <Compile Include="Char.cs" />
+    <Compile Include="Sara\Command.cs" />
     <Compile Include="DocumentMap.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EncodingDetector.cs" />
     <Compile Include="ExportToHTML.cs" />
     <Compile Include="ExportToRTF.cs" />
+    <Compile Include="Sara\FastColorTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +76,7 @@
     <Compile Include="HotkeysEditorForm.Designer.cs">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sara\Line.cs" />
     <Compile Include="LinesAccessor.cs" />
     <Compile Include="MacrosManager.cs" />
     <Compile Include="PlatformType.cs" />
@@ -82,6 +87,8 @@
     <Compile Include="Ruler.Designer.cs">
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sara\Style.cs" />
+    <Compile Include="Sara\VisualMarker.cs" />
     <Compile Include="SyntaxDescriptor.cs" />
     <Compile Include="SyntaxHighlighter.cs" />
     <Compile Include="ReplaceForm.cs">
@@ -135,8 +142,37 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="FCTB_key.snk" />
+    <None Include="Sara-FCTB.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="license.txt" />
+    <Content Include="Sara\Readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if $(ConfigurationName) == Release (
+
+  if not exist "$(SolutionDir)NuGet Output" mkdir "$(SolutionDir)NuGet Output"
+
+  cd $(SolutionDir)
+  echo ---Packing
+  nuget pack $(ProjectDir)Sara-FCTB.nuspec -OutputDirectory "$(SolutionDir)NuGet Output"
+
+  :: The following is for a local copy of the NuGet Repository
+  echo ---Reminder: The version in Sara-FCTB.nuspec must match the FastColoredTextBox version.
+  echo ---Deploying local NuGet Repository
+  if exist "E:\Nuget Output" (
+    echo ---Copying Package
+    copy "$(SolutionDir)NuGet Output\Sara-FCTB.2.16.26.100.nupkg" "E:\NuGet Output\"
+    
+    echo ---Initialize local NuGet Repository
+    rd /s/q "E:\NuGet Repository"
+    mkdir "E:\NuGet Repository"
+    nuget init "E:\Nuget Output" "E:\Nuget Repository"
+    echo ---Complete..
+  )
+)</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

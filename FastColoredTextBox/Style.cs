@@ -100,7 +100,7 @@ namespace FastColoredTextBoxNS
     /// Style for chars rendering
     /// This renderer can draws chars, with defined fore and back colors
     /// </summary>
-    public class TextStyle : Style
+    public partial class TextStyle : Style
     {
         public Brush ForeBrush { get; set; }
         public Brush BackgroundBrush { get; set; }
@@ -151,12 +151,7 @@ namespace FastColoredTextBoxNS
                 else
                 {
                     //classic mode 
-                    for (int i = range.Start.iChar; i < range.End.iChar; i++)
-                    {
-                        //draw char
-                        gr.DrawString(line[i].c.ToString(), f, ForeBrush, x, y, stringFormat);
-                        x += dx;
-                    }
+                    DrawSara(gr, range, line, f, x, y, dx);
                 }
             }
         }
@@ -254,7 +249,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Renderer for selected area
     /// </summary>
-    public class SelectionStyle : Style
+    public partial class SelectionStyle : Style
     {
         public Brush BackgroundBrush{ get; set;}
         public Brush ForegroundBrush { get; private set; }
@@ -299,7 +294,7 @@ namespace FastColoredTextBoxNS
     /// Marker style
     /// Draws background color for text
     /// </summary>
-    public class MarkerStyle : Style
+    public partial class MarkerStyle : Style
     {
         public Brush BackgroundBrush{get;set;}
 
@@ -339,7 +334,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Draws small rectangle for popup menu
     /// </summary>
-    public class ShortcutStyle : Style
+    public partial class ShortcutStyle : Style
     {
         public Pen borderPen;
 

@@ -130,6 +130,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public FastColoredTextBox()
         {
+            CtorSara();
             //register type provider
             TypeDescriptionProvider prov = TypeDescriptor.GetProvider(GetType());
             object theProvider =
@@ -1790,7 +1791,12 @@ namespace FastColoredTextBoxNS
             needRecalcFoldingLines = true;
 
             needRiseVisibleRangeChangedDelayed = true;
-            ResetTimer(timer);
+
+            #region Sara
+            if (SelectionChangedDelayedEnabled)
+                #endregion Sara
+                ResetTimer(timer);
+
             if (VisibleRangeChanged != null)
                 VisibleRangeChanged(this, new EventArgs());
         }
@@ -2282,6 +2288,11 @@ namespace FastColoredTextBoxNS
 
         public virtual void OnSelectionChangedDelayed()
         {
+            #region Sara
+            if (Selection.Start.iLine == -1)
+                return;
+            #endregion Sara
+
             RecalcScrollByOneLine(Selection.Start.iLine);
             //highlight brackets
             ClearBracketsPositions();
@@ -5015,23 +5026,18 @@ namespace FastColoredTextBoxNS
                 int y = lineInfo.startY - VerticalScroll.Value;
                 //
                 e.Graphics.SmoothingMode = SmoothingMode.None;
-                //draw line background
-                if (lineInfo.VisibleState == VisibleState.Visible)
-                    if (line.BackgroundBrush != null)
-                        e.Graphics.FillRectangle(line.BackgroundBrush,
-                                                 new Rectangle(textAreaRect.Left, y, textAreaRect.Width,
-                                                               CharHeight*lineInfo.WordWrapStringsCount));
-                //draw current line background
-                if (CurrentLineColor != Color.Transparent && iLine == Selection.Start.iLine)
-                    if (Selection.IsEmpty)
-                        e.Graphics.FillRectangle(currentLineBrush,
-                                                 new Rectangle(textAreaRect.Left, y, textAreaRect.Width, CharHeight));
+                #region Sara
+                NewMethod1(e, line, iLine, textAreaRect, y, lineInfo);
+                #endregion Sara
                 //draw changed line marker
                 if (ChangedLineColor != Color.Transparent && line.IsChanged)
                     e.Graphics.FillRectangle(changedLineBrush,
                                              new RectangleF(-10, y, LeftIndent - minLeftIndent - 2 + 10, CharHeight + 1));
                 //
                 e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                #region Sara
+                if (line.IsDocumented) NewMethod(e, y);
+                #endregion Sara
                 //
                 //draw bookmark
                 if (bookmarksByLineIndex.ContainsKey(iLine))
@@ -6108,8 +6114,13 @@ namespace FastColoredTextBoxNS
             if (HighlightFoldingIndicator)
                 HighlightFoldings();
             //
-            needRiseSelectionChangedDelayed = true;
-            ResetTimer(timer);
+            #region Sara
+            if (SelectionChangedDelayedEnabled)
+            {
+                needRiseSelectionChangedDelayed = true;
+                ResetTimer(timer);
+            }
+            #endregion Sara
 
             if (SelectionChanged != null)
                 SelectionChanged(this, new EventArgs());
@@ -6244,8 +6255,12 @@ namespace FastColoredTextBoxNS
         /// <returns>Coordiantes</returns>
         public Point PlaceToPoint(Place place)
         {
-            if (place.iLine >= LineInfos.Count)
+            #region Sara
+            //Prior code: if (place.iLine >= LineInfos.Count)
+            if (place.iLine == -1 || place.iLine >= LineInfos.Count)
                 return new Point();
+            #endregion Sara
+
             int y = LineInfos[place.iLine].startY;
             //
             int iWordWrapIndex = LineInfos[place.iLine].GetWordWrapStringIndex(place.iChar);

@@ -8,7 +8,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Line of text
     /// </summary>
-    public class Line : IList<Char>
+    public partial class Line : IList<Char>
     {
         protected List<Char> chars;
 
@@ -44,6 +44,7 @@ namespace FastColoredTextBoxNS
         {
             this.UniqueId = uid;
             chars = new List<Char>();
+            SaraLine(uid);
         }
 
 

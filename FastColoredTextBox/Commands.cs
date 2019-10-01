@@ -7,7 +7,7 @@ namespace FastColoredTextBoxNS
     /// Insert single char
     /// </summary>
     /// <remarks>This operation includes also insertion of new line and removing char by backspace</remarks>
-    public class InsertCharCommand : UndoableCommand
+    public partial class InsertCharCommand : UndoableCommand
     {
         public char c;
         char deletedChar = '\x0';
@@ -195,7 +195,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Insert text
     /// </summary>
-    public class InsertTextCommand : UndoableCommand
+    public partial class InsertTextCommand : UndoableCommand
     {
         public string InsertedText;
 
@@ -253,6 +253,7 @@ namespace FastColoredTextBoxNS
                         InsertCharCommand.InsertChar('\n', ref cc, ts);
                     else
                         InsertCharCommand.InsertChar(c, ref cc, ts);
+                    if (i % 250000 == 0) DoEventsSara();
                 }
                 ts.NeedRecalc(new TextSource.TextChangedEventArgs(0, 1));
             }
