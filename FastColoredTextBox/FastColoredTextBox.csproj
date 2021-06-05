@@ -60,6 +60,9 @@
     <Compile Include="EncodingDetector.cs" />
     <Compile Include="ExportToHTML.cs" />
     <Compile Include="ExportToRTF.cs" />
+    <Compile Include="Sara\FastColorTextBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -74,6 +77,7 @@
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LineNumberFormatting.cs" />
+    <Compile Include="Sara\Line.cs" />
     <Compile Include="LinesAccessor.cs" />
     <Compile Include="MacrosManager.cs" />
     <Compile Include="PlatformType.cs" />
@@ -84,6 +88,8 @@
     <Compile Include="Ruler.Designer.cs">
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sara\Style.cs" />
+    <Compile Include="Sara\VisualMarker.cs" />
     <Compile Include="SyntaxDescriptor.cs" />
     <Compile Include="SyntaxHighlighter.cs" />
     <Compile Include="ReplaceForm.cs">
@@ -138,7 +144,15 @@
   <ItemGroup>
     <None Include="FCTB_key.snk" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="license.txt" />
+    <Content Include="Sara\Readme.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
