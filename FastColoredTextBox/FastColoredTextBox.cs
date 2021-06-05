@@ -91,6 +91,7 @@ namespace FastColoredTextBoxNS
         private int lineInterval;
         private Color lineNumberColor;
         private uint lineNumberStartValue;
+        private LineNumberFormatting lineNumberFormatting;
         private int lineSelectFrom;
         private TextSource lines;
         private IntPtr m_hImc;
@@ -625,6 +626,22 @@ namespace FastColoredTextBoxNS
             set
             {
                 lineNumberStartValue = value;
+                needRecalc = true;
+                Invalidate();
+            }
+        }
+
+        /// <summary>
+        /// To create your own line number formatting, you have to implement the abstract LineNumberFormatting class
+        /// </summary>
+        [DefaultValue(typeof(LineNumberFormatting), null)]
+        [Description("Format of string displayed when ShowLineNumbers = true")]
+        public LineNumberFormatting LineNumberFormatting
+        {
+            get { return lineNumberFormatting; }
+            set
+            {
+                lineNumberFormatting = value;
                 needRecalc = true;
                 Invalidate();
             }
@@ -3375,15 +3392,26 @@ namespace FastColoredTextBoxNS
         {
             if (ShowScrollBars)
             {
-                //some magic for update scrolls
-                base.AutoScrollMinSize -= new Size(1, 0);
-                base.AutoScrollMinSize += new Size(1, 0);
+                OnMagicUpdateScrollBars();
             }
             else
                 PerformLayout();
 
-            if(IsHandleCreated)
+            if (IsHandleCreated)
                 BeginInvoke((MethodInvoker)OnScrollbarsUpdated);
+        }
+
+        private void OnMagicUpdateScrollBars()
+        {
+            if (this.InvokeRequired)
+            {
+                Invoke(new MethodInvoker(OnMagicUpdateScrollBars));
+            }
+            else
+            {
+                base.AutoScrollMinSize -= new Size(1, 0);
+                base.AutoScrollMinSize += new Size(1, 0);
+            }
         }
 
         protected virtual void OnScrollbarsUpdated()
@@ -5052,11 +5080,16 @@ namespace FastColoredTextBoxNS
                                                        e.Graphics, e.ClipRectangle));
                 //draw line number
                 if (ShowLineNumbers)
-                using (var lineNumberBrush = new SolidBrush(LineNumberColor))
-                    e.Graphics.DrawString((iLine + lineNumberStartValue).ToString(), Font, lineNumberBrush,
-                                new RectangleF(-10, y, LeftIndent - minLeftIndent - 2 + 10, CharHeight + (int)(lineInterval * 0.5f)),
-                                new StringFormat(StringFormatFlags.DirectionRightToLeft) { LineAlignment = StringAlignment.Center });
+                {
+                    var lineNumber = iLine + (int)lineNumberStartValue;
+                    var lineNumberText = LineNumberFormatting?.FromLineNumberToString(lineNumber) ?? $"{lineNumber}";
 
+                    using (var lineNumberBrush = new SolidBrush(LineNumberColor))
+                        e.Graphics.DrawString(lineNumberText, Font, lineNumberBrush,
+                                               new RectangleF(-10, y, LeftIndent - minLeftIndent - 2 + 10, CharHeight + (int)(lineInterval * 0.5f)),
+                                               new StringFormat(StringFormatFlags.DirectionRightToLeft) { LineAlignment = StringAlignment.Center });
+                }
+                
                 //create markers
                 if (lineInfo.VisibleState == VisibleState.StartOfHiddenBlock)
                     visibleMarkers.Add(new ExpandFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
@@ -6613,19 +6646,12 @@ namespace FastColoredTextBoxNS
             if (from == to)
                 return;
 
-            //find first non empty line
-            for (; from <= to; from++)
-            {
-                if (GetLineText(from).Trim().Length > 0)
-                {
-                    //hide lines
-                    for (int i = from + 1; i <= to; i++)
-                        SetVisibleState(i, VisibleState.Hidden);
-                    SetVisibleState(from, VisibleState.StartOfHiddenBlock);
-                    Invalidate();
-                    break;
-                }
-            }
+            //hide lines
+            for (int i = from + 1; i <= to; i++)
+                SetVisibleState(i, VisibleState.Hidden);
+            SetVisibleState(from, VisibleState.StartOfHiddenBlock);
+            Invalidate();
+
             //Move caret outside
             from = Math.Min(fromLine, toLine);
             to = Math.Max(fromLine, toLine);
@@ -7602,10 +7628,19 @@ window.status = ""#print"";
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                int line = Math.Min(LinesCount - 1, Math.Max(0, form.SelectedLineNumber - 1));
-                Selection = new Range(this, 0, line, 0, line);
-                DoSelectionVisible();
+                SetSelectedLine(form.SelectedLineNumber);
             }
+        }
+
+        /// <summary>
+        /// Set current line number and make it visible
+        /// </summary>
+        /// <param name="lineNumberToSelect"></param>
+        public void SetSelectedLine(int lineNumberToSelect)
+        {
+            var line = Math.Min(LinesCount - 1, Math.Max(0, lineNumberToSelect - 1));
+            Selection = new Range(this, 0, line, 0, line);
+            DoSelectionVisible();
         }
 
         /// <summary>
