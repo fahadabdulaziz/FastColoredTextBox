@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <RootNamespace>FastColoredTextBoxNS</RootNamespace>
     <AssemblyName>FastColoredTextBox</AssemblyName>
     <TargetFramework>net5.0-windows</TargetFramework>
@@ -9,6 +8,8 @@
     <FileVersion>2.16.26.100</FileVersion>
     <Configurations>Debug;Release</Configurations>
     <PackageId>FastColoredTextBox</PackageId>
+    <Version>2.16.26.100</Version>
+    <Authors>Pavel Torgashov</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
