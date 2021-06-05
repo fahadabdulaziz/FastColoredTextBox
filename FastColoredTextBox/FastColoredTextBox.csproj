@@ -76,6 +76,7 @@
     <Compile Include="HotkeysEditorForm.Designer.cs">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="LineNumberFormatting.cs" />
     <Compile Include="Sara\Line.cs" />
     <Compile Include="LineNumberFormatting.cs" />
     <Compile Include="LinesAccessor.cs" />
