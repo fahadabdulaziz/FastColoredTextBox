@@ -7,15 +7,16 @@
     <AssemblyVersion>2.16.26.100</AssemblyVersion>
     <FileVersion>2.16.26.100</FileVersion>
     <Configurations>Debug;Release</Configurations>
-    <PackageId>FastColoredTextBox</PackageId>
-    <Version>2.16.26.100</Version>
-    <Authors>Pavel Torgashov</Authors>
+    <PackageId>FastColoredTextBox-net5</PackageId>
+    <Version>2.17.26.100</Version>
+    <Authors>Pavel Torgashov, Fahad Alshaya, Sara LaFleur</Authors>
     <Company>Pavel Torgashov</Company>
     <Description>Fast сolored textbox control</Description>
     <Copyright>© Pavel Torgashov, 2011-2016, pavel_torgashov@ukr.net.</Copyright>
     <Nullable>enable</Nullable>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>FCTB_key.snk</AssemblyOriginatorKeyFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
