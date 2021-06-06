@@ -59,7 +59,7 @@ namespace FastColoredTextBoxNS
             HighlightSyntax(desc, range);
         }
 
-        public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        public virtual void AutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             FastColoredTextBox tb = (sender as FastColoredTextBox);
             Language language = tb.Language;
@@ -75,25 +75,25 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        private void PHPAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        private void PHPAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             FastColoredTextBox tb = sender as FastColoredTextBox;
             tb.CalcAutoIndentShiftByCodeFolding(sender, args);
         }
 
-        private void SQLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        private void SQLAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             FastColoredTextBox tb = sender as FastColoredTextBox;
             tb.CalcAutoIndentShiftByCodeFolding(sender, args);
         }
 
-        private void HTMLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        private void HTMLAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             FastColoredTextBox tb = sender as FastColoredTextBox;
             tb.CalcAutoIndentShiftByCodeFolding(sender, args);
         }
 
-        private void VBAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        private void VBAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             //end of block
             if (Regex.IsMatch(args.LineText, @"^\s*(End|EndIf|Next|Loop)\b", RegexOptions.IgnoreCase))
@@ -133,7 +133,7 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        private void CSharpAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        private void CSharpAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             //block {}
             if (Regex.IsMatch(args.LineText, @"^[^""']*\{.*\}[^""']*$"))

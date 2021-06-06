@@ -11,20 +11,22 @@ namespace Tester
 {
     public partial class AutocompleteSample3 : Form
     {
-        AutocompleteMenu popupMenu;
+        private AutocompleteMenu popupMenu;
 
         public AutocompleteSample3()
         {
             InitializeComponent();
 
             //create autocomplete popup menu
-            popupMenu = new AutocompleteMenu(fctb);
-            popupMenu.ForeColor = Color.White;
-            popupMenu.BackColor = Color.Gray;
-            popupMenu.SelectedColor = Color.Purple;
-            popupMenu.SearchPattern = @"[\w\.]";
-            popupMenu.AllowTabKey = true;
-            popupMenu.AlwaysShowTooltip = true;
+            popupMenu = new AutocompleteMenu(fctb)
+            {
+                ForeColor = Color.White,
+                BackColor = Color.Gray,
+                SelectedColor = Color.Purple,
+                SearchPattern = @"[\w\.]",
+                AllowTabKey = true,
+                AlwaysShowTooltip = true
+            };
             //assign DynamicCollection as items source
             popupMenu.Items.SetAutocompleteItems(new DynamicCollection(popupMenu, fctb));
         }
@@ -78,7 +80,7 @@ namespace Tester
                 };
         }
 
-        Type FindTypeByName(string name)
+        private static Type FindTypeByName(string name)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             Type type = null;

@@ -16,7 +16,7 @@ namespace FastColoredTextBoxNS
                 if (line.Count <= i) break;
 
                 //draw char
-                gr.DrawString(line[i].c.ToString(), f, ForeBrush, x, y, stringFormat);
+                gr.DrawString(line[i].c.ToString(), f, ForeBrush, x, y, StringFormat);
                 x += dx;
             }
         }

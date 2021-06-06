@@ -170,7 +170,7 @@ namespace Tester
 
         private void MainForm_DoubleClick(object sender, EventArgs e)
         {
-            new Sandbox().ShowDialog();
+            _ = new Sandbox().ShowDialog();
         }
 
         private void button31_Click(object sender, EventArgs e)

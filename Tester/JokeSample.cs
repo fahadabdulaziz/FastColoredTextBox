@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
@@ -27,7 +28,7 @@ namespace Tester
     /// <summary>
     /// This class is used as text renderer
     /// </summary>
-    class JokeStyle : TextStyle
+    internal class JokeStyle : TextStyle
     {
         public JokeStyle():base(null, null, FontStyle.Regular)
         {

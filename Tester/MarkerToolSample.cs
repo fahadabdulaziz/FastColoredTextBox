@@ -3,17 +3,19 @@ using System.Drawing;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using System.Drawing.Drawing2D;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
     public partial class MarkerToolSample : Form
     {
         //Shortcut style
-        ShortcutStyle shortCutStyle = new ShortcutStyle(Pens.Maroon);
+        private ShortcutStyle shortCutStyle = new ShortcutStyle(Pens.Maroon);
+
         //Marker styles
-        MarkerStyle YellowStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(180, Color.Yellow)));
-        MarkerStyle RedStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(180, Color.Red)));
-        MarkerStyle GreenStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(180, Color.Green)));
+        private MarkerStyle YellowStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(180, Color.Yellow)));
+        private MarkerStyle RedStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(180, Color.Red)));
+        private MarkerStyle GreenStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(180, Color.Green)));
 
         public MarkerToolSample()
         {
@@ -61,7 +63,7 @@ namespace Tester
         {
             TrimSelection();
             //set background style
-            switch((string)((sender as ToolStripMenuItem).Tag))
+            switch((string)(sender as ToolStripMenuItem).Tag)
             {
                 case "yellow": fctb.Selection.SetStyle(YellowStyle); break;
                 case "red": fctb.Selection.SetStyle(RedStyle); break;

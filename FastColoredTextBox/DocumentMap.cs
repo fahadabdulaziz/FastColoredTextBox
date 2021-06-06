@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
 using System.Drawing.Drawing2D;
-using System.Text;
 using System.Windows.Forms;
 
 namespace FastColoredTextBoxNS
@@ -14,16 +11,15 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class DocumentMap : Control
     {
-        public EventHandler TargetChanged;
-
-        FastColoredTextBox target;
+        public event EventHandler? TargetChanged;
+        private FastColoredTextBox? target;
         private float scale = 0.3f;
         private bool needRepaint = true;
         private Place startPlace = Place.Empty;
         private bool scrollbarVisible = true;
 
         [Description("Target FastColoredTextBox")]
-        public FastColoredTextBox Target
+        public FastColoredTextBox? Target
         {
             get { return target; }
             set
@@ -32,10 +28,9 @@ namespace FastColoredTextBoxNS
                     UnSubscribe(target);
 
                 target = value;
-                if (value != null)
-                {
+                if (target != null)
                     Subscribe(target);
-                }
+
                 OnTargetChanged();
             }
         }
@@ -77,9 +72,9 @@ namespace FastColoredTextBoxNS
             Application.Idle += Application_Idle;
         }
 
-        void Application_Idle(object sender, EventArgs e)
+        private void Application_Idle(object? sender, EventArgs e)
         {
-            if(needRepaint)
+            if (needRepaint)
                 Invalidate();
         }
 
@@ -87,8 +82,7 @@ namespace FastColoredTextBoxNS
         {
             NeedRepaint();
 
-            if (TargetChanged != null)
-                TargetChanged(this, EventArgs.Empty);
+            TargetChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected virtual void UnSubscribe(FastColoredTextBox target)
@@ -105,17 +99,17 @@ namespace FastColoredTextBoxNS
             target.VisibleRangeChanged += new EventHandler(Target_VisibleRangeChanged);
         }
 
-        protected virtual void Target_VisibleRangeChanged(object sender, EventArgs e)
+        protected virtual void Target_VisibleRangeChanged(object? sender, EventArgs e)
         {
             NeedRepaint();
         }
 
-        protected virtual void Target_SelectionChanged(object sender, EventArgs e)
+        protected virtual void Target_SelectionChanged(object? sender, EventArgs e)
         {
             NeedRepaint();
         }
 
-        protected virtual void Target_Scroll(object sender, ScrollEventArgs e)
+        protected virtual void Target_Scroll(object? sender, ScrollEventArgs e)
         {
             NeedRepaint();
         }
@@ -136,7 +130,7 @@ namespace FastColoredTextBoxNS
             if (target == null)
                 return;
 
-            var zoom = this.Scale * 100 / target.Zoom;
+            var zoom = Scale * 100 / target.Zoom;
 
             if (zoom <= float.Epsilon)
                 return;
@@ -188,12 +182,10 @@ namespace FastColoredTextBoxNS
                 e.Graphics.ResetTransform();
                 e.Graphics.SmoothingMode = SmoothingMode.None;
 
-                using (var brush = new SolidBrush(Color.FromArgb(200, ForeColor)))
-                {
-                    var rect = new RectangleF(ClientSize.Width - 3, ClientSize.Height*sp1, 2,
-                                              ClientSize.Height*(sp2 - sp1));
-                    e.Graphics.FillRectangle(brush, rect);
-                }
+                using var brush = new SolidBrush(Color.FromArgb(200, ForeColor));
+                var rect = new RectangleF(ClientSize.Width - 3, ClientSize.Height * sp1, 2,
+                                          ClientSize.Height * (sp2 - sp1));
+                e.Graphics.FillRectangle(brush, rect);
             }
 
             needRepaint = false;
@@ -201,14 +193,14 @@ namespace FastColoredTextBoxNS
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
                 Scroll(e.Location);
             base.OnMouseDown(e);
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            if (e.Button == MouseButtons.Left)
                 Scroll(e.Location);
             base.OnMouseMove(e);
         }
@@ -218,22 +210,22 @@ namespace FastColoredTextBoxNS
             if (target == null)
                 return;
 
-            var zoom = this.Scale*100/target.Zoom;
+            var zoom = Scale * 100 / target.Zoom;
 
             if (zoom <= float.Epsilon)
                 return;
 
             var p0 = target.PlaceToPoint(startPlace);
-            p0 = new Point(0, p0.Y + (int) (point.Y/zoom));
+            p0 = new Point(0, p0.Y + (int)(point.Y / zoom));
             var pp = target.PointToPlace(p0);
             target.DoRangeVisible(new Range(target, pp, pp), true);
-            BeginInvoke((MethodInvoker)OnScroll);
+            _ = BeginInvoke((MethodInvoker)OnScroll);
         }
 
         private void OnScroll()
         {
             Refresh();
-            target.Refresh();
+            target?.Refresh();
         }
 
         protected override void Dispose(bool disposing)

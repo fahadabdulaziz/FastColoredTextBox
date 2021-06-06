@@ -7,15 +7,17 @@ namespace Tester
 {
     public partial class AutocompleteSample : Form
     {
-        FastColoredTextBoxNS.AutocompleteMenu popupMenu;
+        private FastColoredTextBoxNS.AutocompleteMenu popupMenu;
 
         public AutocompleteSample()
         {
             InitializeComponent();
 
             //create autocomplete popup menu
-            popupMenu = new FastColoredTextBoxNS.AutocompleteMenu(fctb);
-            popupMenu.MinFragmentLength = 2;
+            popupMenu = new FastColoredTextBoxNS.AutocompleteMenu(fctb)
+            {
+                MinFragmentLength = 2
+            };
 
             //generate 456976 words
             var randomWords = new List<string>();

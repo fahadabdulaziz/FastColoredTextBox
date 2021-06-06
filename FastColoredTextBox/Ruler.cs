@@ -22,7 +22,7 @@ namespace FastColoredTextBoxNS
         [DefaultValue(typeof(Color), "Black")]
         public Color CaretTickColor { get; set; }
 
-        FastColoredTextBox target;
+        private FastColoredTextBox target;
 
         [Description("Target FastColoredTextBox")]
         public FastColoredTextBox Target
@@ -55,8 +55,7 @@ namespace FastColoredTextBoxNS
 
         protected virtual void OnTargetChanged()
         {
-            if (TargetChanged != null)
-                TargetChanged(this, EventArgs.Empty);
+            TargetChanged?.Invoke(this, EventArgs.Empty);
         }
 
         protected virtual void UnSubscribe(FastColoredTextBox target)
@@ -73,17 +72,17 @@ namespace FastColoredTextBoxNS
             target.VisibleRangeChanged += new EventHandler(target_VisibleRangeChanged);
         }
 
-        void target_VisibleRangeChanged(object sender, EventArgs e)
+        private void target_VisibleRangeChanged(object? sender, EventArgs e)
         {
             Invalidate();
         }
 
-        void target_SelectionChanged(object sender, EventArgs e)
+        private void target_SelectionChanged(object? sender, EventArgs e)
         {
             Invalidate();
         }
 
-        protected virtual void target_Scroll(object sender, ScrollEventArgs e)
+        protected virtual void target_Scroll(object? sender, ScrollEventArgs e)
         {
             Invalidate();
         }
@@ -107,9 +106,11 @@ namespace FastColoredTextBoxNS
             e.Graphics.FillRectangle(new LinearGradientBrush(new Rectangle(0, 0, Width, Height), BackColor, BackColor2, 270), new Rectangle(0, 0, Width, Height));
 
             float columnWidth = target.CharWidth;
-            var sf = new StringFormat();
-            sf.Alignment = StringAlignment.Center;
-            sf.LineAlignment = StringAlignment.Near;
+            var sf = new StringFormat
+            {
+                Alignment = StringAlignment.Center,
+                LineAlignment = StringAlignment.Near
+            };
 
             var zeroPoint = target.PositionToPoint(0);
             zeroPoint = PointToClient(target.PointToScreen(zeroPoint));

@@ -11,15 +11,14 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class Range : IEnumerable<Place>
     {
-        Place start;
-        Place end;
-        public readonly FastColoredTextBox tb;
-        int preferedPos = -1;
-        int updating = 0;
-
-        string cachedText;
-        List<Place> cachedCharIndexToPlace;
-        int cachedTextVersion = -1;
+        private Place start;
+        private Place end;
+        private readonly FastColoredTextBox tb;
+        private int preferedPos = -1;
+        private int updating = 0;
+        private string? cachedText;
+        private List<Place>? cachedCharIndexToPlace;
+        private int cachedTextVersion = -1;
 
         /// <summary>
         /// Constructor
@@ -122,15 +121,15 @@ namespace FastColoredTextBoxNS
             if (ColumnSelectionMode)
                 return GetIntersectionWith_ColumnSelectionMode(range);
 
-            Range r1 = this.Clone();
+            Range r1 = Clone();
             Range r2 = range.Clone();
             r1.Normalize();
             r2.Normalize();
             Place newStart = r1.Start > r2.Start ? r1.Start : r2.Start;
             Place newEnd = r1.End < r2.End ? r1.End : r2.End;
             if (newEnd < newStart)
-                return new Range(tb, start, start);
-            return tb.GetRange(newStart, newEnd);
+                return new Range(Tb, start, start);
+            return Tb.GetRange(newStart, newEnd);
         }
 
         /// <summary>
@@ -140,14 +139,14 @@ namespace FastColoredTextBoxNS
         /// <returns></returns>
         public Range GetUnionWith(Range range)
         {
-            Range r1 = this.Clone();
+            Range r1 = Clone();
             Range r2 = range.Clone();
             r1.Normalize();
             r2.Normalize();
             Place newStart = r1.Start < r2.Start ? r1.Start : r2.Start;
             Place newEnd = r1.End > r2.End ? r1.End : r2.End;
 
-            return tb.GetRange(newStart, newEnd);
+            return Tb.GetRange(newStart, newEnd);
         }
 
         /// <summary>
@@ -158,15 +157,15 @@ namespace FastColoredTextBoxNS
             ColumnSelectionMode = false;
 
             Start = new Place(0, 0);
-            if (tb.LinesCount == 0)
+            if (Tb.LinesCount == 0)
                 Start = new Place(0, 0);
             else
             {
                 end = new Place(0, 0);
-                start = new Place(tb[tb.LinesCount - 1].Count, tb.LinesCount - 1);
+                start = new Place(Tb[Tb.LinesCount - 1].Count, Tb.LinesCount - 1);
             }
-            if (this == tb.Selection)
-                tb.Invalidate();
+            if (this == Tb.Selection)
+                Tb.Invalidate();
         }
 
         /// <summary>
@@ -206,7 +205,7 @@ namespace FastColoredTextBoxNS
         /// FastColoredTextBox.Selection range. So, if you want to set text, you need to use FastColoredTextBox.Selection
         /// and FastColoredTextBox.InsertText() mehtod.
         /// </remarks>
-        public virtual string Text
+        public virtual string? Text
         {
             get
             {
@@ -223,11 +222,11 @@ namespace FastColoredTextBoxNS
                 for (int y = fromLine; y <= toLine; y++)
                 {
                     int fromX = y == fromLine ? fromChar : 0;
-                    int toX = y == toLine ? Math.Min(tb[y].Count - 1, toChar - 1) : tb[y].Count - 1;
+                    int toX = y == toLine ? Math.Min(Tb[y].Count - 1, toChar - 1) : Tb[y].Count - 1;
                     for (int x = fromX; x <= toX; x++)
-                        sb.Append(tb[y][x].c);
+                        _ = sb.Append(Tb[y][x].c);
                     if (y != toLine && fromLine != toLine)
-                        sb.AppendLine();
+                        _ = sb.AppendLine();
                 }
                 return sb.ToString();
             }
@@ -248,7 +247,7 @@ namespace FastColoredTextBoxNS
                 for (int y = fromLine; y <= toLine; y++)
                 {
                     int fromX = y == fromLine ? FromX : 0;
-                    int toX = y == toLine ? Math.Min(tb[y].Count - 1, ToX - 1) : tb[y].Count - 1;
+                    int toX = y == toLine ? Math.Min(Tb[y].Count - 1, ToX - 1) : Tb[y].Count - 1;
 
                     cnt += toX - fromX + 1;
 
@@ -271,10 +270,10 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        internal void GetText(out string text, out List<Place> charIndexToPlace)
+        internal void GetText(out string? text, out List<Place>? charIndexToPlace)
         {
             //try get cached text
-            if (tb.TextVersion == cachedTextVersion)
+            if (Tb.TextVersion == cachedTextVersion)
             {
                 text = cachedText;
                 charIndexToPlace = cachedCharIndexToPlace;
@@ -293,17 +292,17 @@ namespace FastColoredTextBoxNS
                 for (int y = fromLine; y <= toLine; y++)
                 {
                     int fromX = y == fromLine ? fromChar : 0;
-                    int toX = y == toLine ? Math.Min(toChar - 1, tb[y].Count - 1) : tb[y].Count - 1;
+                    int toX = y == toLine ? Math.Min(toChar - 1, Tb[y].Count - 1) : Tb[y].Count - 1;
                     for (int x = fromX; x <= toX; x++)
                     {
-                        sb.Append(tb[y][x].c);
+                        _ = sb.Append(Tb[y][x].c);
                         charIndexToPlace.Add(new Place(x, y));
                     }
                     if (y != toLine && fromLine != toLine)
                         foreach (char c in Environment.NewLine)
                         {
-                            sb.Append(c);
-                            charIndexToPlace.Add(new Place(tb[y].Count/*???*/, y));
+                            _ = sb.Append(c);
+                            charIndexToPlace.Add(new Place(Tb[y].Count/*???*/, y));
                         }
                 }
             }
@@ -312,7 +311,7 @@ namespace FastColoredTextBoxNS
             //caching
             cachedText = text;
             cachedCharIndexToPlace = charIndexToPlace;
-            cachedTextVersion = tb.TextVersion;
+            cachedTextVersion = Tb.TextVersion;
         }
 
         /// <summary>
@@ -322,9 +321,9 @@ namespace FastColoredTextBoxNS
         {
             get
             {
-                if (Start.iChar >= tb[Start.iLine].Count)
+                if (Start.iChar >= Tb[Start.iLine].Count)
                     return '\n';
-                return tb[Start.iLine][Start.iChar].c;
+                return Tb[Start.iLine][Start.iChar].c;
             }
         }
 
@@ -335,11 +334,11 @@ namespace FastColoredTextBoxNS
         {
             get
             {
-                if (Start.iChar > tb[Start.iLine].Count)
+                if (Start.iChar > Tb[Start.iLine].Count)
                     return '\n';
                 if (Start.iChar <= 0)
                     return '\n';
-                return tb[Start.iLine][Start.iChar - 1].c;
+                return Tb[Start.iLine][Start.iChar - 1].c;
             }
         }
 
@@ -348,10 +347,10 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public string GetCharsBeforeStart(int charsCount)
         {
-            var pos = tb.PlaceToPosition(Start) - charsCount;
+            var pos = Tb.PlaceToPosition(Start) - charsCount;
             if (pos < 0) pos = 0;
 
-            return new Range(tb, tb.PositionToPlace(pos), Start).Text;
+            return new Range(Tb, Tb.PositionToPlace(pos), Start).Text!;
         }
 
         /// <summary>
@@ -427,10 +426,10 @@ namespace FastColoredTextBoxNS
             if (ColumnSelectionMode)
                 return GoRightThroughFolded_ColumnSelectionMode();
 
-            if (start.iLine >= tb.LinesCount - 1 && start.iChar >= tb[tb.LinesCount - 1].Count)
+            if (start.iLine >= Tb.LinesCount - 1 && start.iChar >= Tb[Tb.LinesCount - 1].Count)
                 return false;
 
-            if (start.iChar < tb[start.iLine].Count)
+            if (start.iChar < Tb[start.iLine].Count)
                 start.Offset(1, 0);
             else
                 start = new Place(0, start.iLine + 1);
@@ -468,7 +467,7 @@ namespace FastColoredTextBoxNS
             if (start.iChar > 0)
                 start.Offset(-1, 0);
             else
-                start = new Place(tb[start.iLine - 1].Count, start.iLine - 1);
+                start = new Place(Tb[start.iLine - 1].Count, start.iLine - 1);
 
             preferedPos = -1;
             end = start;
@@ -489,13 +488,13 @@ namespace FastColoredTextBoxNS
 
             if (start.iChar != 0 || start.iLine != 0)
             {
-                if (start.iChar > 0 && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                if (start.iChar > 0 && Tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
                     start.Offset(-1, 0);
                 else
                 {
-                    int i = tb.FindPrevVisibleLine(start.iLine);
+                    int i = Tb.FindPrevVisibleLine(start.iLine);
                     if (i == start.iLine) return;
-                    start = new Place(tb[i].Count, i);
+                    start = new Place(Tb[i].Count, i);
                 }
             }
 
@@ -518,13 +517,13 @@ namespace FastColoredTextBoxNS
                     return;
                 }
 
-            if (start.iLine < tb.LinesCount - 1 || start.iChar < tb[tb.LinesCount - 1].Count)
+            if (start.iLine < Tb.LinesCount - 1 || start.iChar < Tb[Tb.LinesCount - 1].Count)
             {
-                if (start.iChar < tb[start.iLine].Count && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                if (start.iChar < Tb[start.iLine].Count && Tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
                     start.Offset(1, 0);
                 else
                 {
-                    int i = tb.FindNextVisibleLine(start.iLine);
+                    int i = Tb.FindNextVisibleLine(start.iLine);
                     if (i == start.iLine) return;
                     start = new Place(0, i);
                 }
@@ -550,22 +549,22 @@ namespace FastColoredTextBoxNS
                 }
 
             if (preferedPos < 0)
-                preferedPos = start.iChar - tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
+                preferedPos = start.iChar - Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
 
-            int iWW = tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
+            int iWW = Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
             if (iWW == 0)
             {
                 if (start.iLine <= 0) return;
-                int i = tb.FindPrevVisibleLine(start.iLine);
+                int i = Tb.FindPrevVisibleLine(start.iLine);
                 if (i == start.iLine) return;
                 start.iLine = i;
-                iWW = tb.LineInfos[start.iLine].WordWrapStringsCount;
+                iWW = Tb.LineInfos[start.iLine].WordWrapStringsCount;
             }
 
             if (iWW > 0)
             {
-                int finish = tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW - 1, tb[start.iLine]);
-                start.iChar = tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW - 1) + preferedPos;
+                int finish = Tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW - 1, Tb[start.iLine]);
+                start.iChar = Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW - 1) + preferedPos;
                 if (start.iChar > finish + 1)
                     start.iChar = finish + 1;
             }
@@ -581,27 +580,27 @@ namespace FastColoredTextBoxNS
             ColumnSelectionMode = false;
 
             if (preferedPos < 0)
-                preferedPos = start.iChar - tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
+                preferedPos = start.iChar - Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
 
-            int pageHeight = tb.ClientRectangle.Height / tb.CharHeight - 1;
+            int pageHeight = Tb.ClientRectangle.Height / Tb.CharHeight - 1;
 
             for (int i = 0; i < pageHeight; i++)
             {
-                int iWW = tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
+                int iWW = Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
                 if (iWW == 0)
                 {
                     if (start.iLine <= 0) break;
                     //pass hidden
-                    int newLine = tb.FindPrevVisibleLine(start.iLine);
+                    int newLine = Tb.FindPrevVisibleLine(start.iLine);
                     if (newLine == start.iLine) break;
                     start.iLine = newLine;
-                    iWW = tb.LineInfos[start.iLine].WordWrapStringsCount;
+                    iWW = Tb.LineInfos[start.iLine].WordWrapStringsCount;
                 }
 
                 if (iWW > 0)
                 {
-                    int finish = tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW - 1, tb[start.iLine]);
-                    start.iChar = tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW - 1) + preferedPos;
+                    int finish = Tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW - 1, Tb[start.iLine]);
+                    start.iChar = Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW - 1) + preferedPos;
                     if (start.iChar > finish + 1)
                         start.iChar = finish + 1;
                 }
@@ -625,23 +624,23 @@ namespace FastColoredTextBoxNS
                 }
 
             if (preferedPos < 0)
-                preferedPos = start.iChar - tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
+                preferedPos = start.iChar - Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
 
-            int iWW = tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
-            if (iWW >= tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
+            int iWW = Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
+            if (iWW >= Tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
             {
-                if (start.iLine >= tb.LinesCount - 1) return;
+                if (start.iLine >= Tb.LinesCount - 1) return;
                 //pass hidden
-                int i = tb.FindNextVisibleLine(start.iLine);
+                int i = Tb.FindNextVisibleLine(start.iLine);
                 if (i == start.iLine) return;
                 start.iLine = i;
                 iWW = -1;
             }
 
-            if (iWW < tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
+            if (iWW < Tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
             {
-                int finish = tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW + 1, tb[start.iLine]);
-                start.iChar = tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW + 1) + preferedPos;
+                int finish = Tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW + 1, Tb[start.iLine]);
+                start.iChar = Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW + 1) + preferedPos;
                 if (start.iChar > finish + 1)
                     start.iChar = finish + 1;
             }
@@ -657,27 +656,27 @@ namespace FastColoredTextBoxNS
             ColumnSelectionMode = false;
 
             if (preferedPos < 0)
-                preferedPos = start.iChar - tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
+                preferedPos = start.iChar - Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar));
 
-            int pageHeight = tb.ClientRectangle.Height / tb.CharHeight - 1;
+            int pageHeight = Tb.ClientRectangle.Height / Tb.CharHeight - 1;
 
             for (int i = 0; i < pageHeight; i++)
             {
-                int iWW = tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
-                if (iWW >= tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
+                int iWW = Tb.LineInfos[start.iLine].GetWordWrapStringIndex(start.iChar);
+                if (iWW >= Tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
                 {
-                    if (start.iLine >= tb.LinesCount - 1) break;
+                    if (start.iLine >= Tb.LinesCount - 1) break;
                     //pass hidden
-                    int newLine = tb.FindNextVisibleLine(start.iLine);
+                    int newLine = Tb.FindNextVisibleLine(start.iLine);
                     if (newLine == start.iLine) break;
                     start.iLine = newLine;
                     iWW = -1;
                 }
 
-                if (iWW < tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
+                if (iWW < Tb.LineInfos[start.iLine].WordWrapStringsCount - 1)
                 {
-                    int finish = tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW + 1, tb[start.iLine]);
-                    start.iChar = tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW + 1) + preferedPos;
+                    int finish = Tb.LineInfos[start.iLine].GetWordWrapStringFinishPosition(iWW + 1, Tb[start.iLine]);
+                    start.iChar = Tb.LineInfos[start.iLine].GetWordWrapStringStartPosition(iWW + 1) + preferedPos;
                     if (start.iChar > finish + 1)
                         start.iChar = finish + 1;
                 }
@@ -696,7 +695,7 @@ namespace FastColoredTextBoxNS
             if (start.iLine < 0)
                 return;
 
-            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
+            if (Tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
                 return;
 
             start = new Place(0, start.iLine);
@@ -715,10 +714,10 @@ namespace FastColoredTextBoxNS
 
             if (start.iLine < 0)
                 return;
-            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
+            if (Tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
                 return;
 
-            start = new Place(tb[start.iLine].Count, start.iLine);
+            start = new Place(Tb[start.iLine].Count, start.iLine);
 
             if (!shift)
                 end = start;
@@ -734,11 +733,11 @@ namespace FastColoredTextBoxNS
         public void SetStyle(Style style)
         {
             //search code for style
-            int code = tb.GetOrSetStyleLayerIndex(style);
+            int code = Tb.GetOrSetStyleLayerIndex(style);
             //set code to chars
             SetStyle(ToStyleIndex(code));
             //
-            tb.Invalidate();
+            Tb.Invalidate();
         }
 
         /// <summary>
@@ -747,7 +746,7 @@ namespace FastColoredTextBoxNS
         public void SetStyle(Style style, string regexPattern)
         {
             //search code for style
-            StyleIndex layer = ToStyleIndex(tb.GetOrSetStyleLayerIndex(style));
+            StyleIndex layer = ToStyleIndex(Tb.GetOrSetStyleLayerIndex(style));
             SetStyle(layer, regexPattern, RegexOptions.None);
         }
 
@@ -757,7 +756,7 @@ namespace FastColoredTextBoxNS
         public void SetStyle(Style style, Regex regex)
         {
             //search code for style
-            StyleIndex layer = ToStyleIndex(tb.GetOrSetStyleLayerIndex(style));
+            StyleIndex layer = ToStyleIndex(Tb.GetOrSetStyleLayerIndex(style));
             SetStyle(layer, regex);
         }
 
@@ -768,7 +767,7 @@ namespace FastColoredTextBoxNS
         public void SetStyle(Style style, string regexPattern, RegexOptions options)
         {
             //search code for style
-            StyleIndex layer = ToStyleIndex(tb.GetOrSetStyleLayerIndex(style));
+            StyleIndex layer = ToStyleIndex(Tb.GetOrSetStyleLayerIndex(style));
             SetStyle(layer, regexPattern, options);
         }
 
@@ -783,7 +782,7 @@ namespace FastColoredTextBoxNS
             foreach (var range in GetRanges(regexPattern, options))
                 range.SetStyle(styleLayer);
             //
-            tb.Invalidate();
+            Tb.Invalidate();
         }
 
         /// <summary>
@@ -794,7 +793,7 @@ namespace FastColoredTextBoxNS
             foreach (var range in GetRanges(regex))
                 range.SetStyle(styleLayer);
             //
-            tb.Invalidate();
+            Tb.Invalidate();
         }
 
         /// <summary>
@@ -812,12 +811,12 @@ namespace FastColoredTextBoxNS
             for (int y = fromLine; y <= toLine; y++)
             {
                 int fromX = y == fromLine ? fromChar : 0;
-                int toX = y == toLine ? Math.Min(toChar - 1, tb[y].Count - 1) : tb[y].Count - 1;
+                int toX = y == toLine ? Math.Min(toChar - 1, Tb[y].Count - 1) : Tb[y].Count - 1;
                 for (int x = fromX; x <= toX; x++)
                 {
-                    Char c = tb[y][x];
+                    Char c = Tb[y][x];
                     c.style |= styleIndex;
-                    tb[y][x] = c;
+                    Tb[y][x] = c;
                 }
             }
         }
@@ -846,12 +845,12 @@ namespace FastColoredTextBoxNS
             }
 
             foreach (var range in GetRanges(startFoldingPattern, options))
-                tb[range.Start.iLine].FoldingStartMarker = startFoldingPattern;
+                Tb[range.Start.iLine].FoldingStartMarker = startFoldingPattern;
 
             foreach (var range in GetRanges(finishFoldingPattern, options))
-                tb[range.Start.iLine].FoldingEndMarker = startFoldingPattern;
+                Tb[range.Start.iLine].FoldingEndMarker = startFoldingPattern;
             //
-            tb.Invalidate();
+            Tb.Invalidate();
         }
 
         /// <summary>
@@ -863,11 +862,11 @@ namespace FastColoredTextBoxNS
             foreach (var range in GetRanges(foldingPattern, options))
             {
                 if (range.Start.iLine > 0)
-                    tb[range.Start.iLine - 1].FoldingEndMarker = foldingPattern;
-                tb[range.Start.iLine].FoldingStartMarker = foldingPattern;
+                    Tb[range.Start.iLine - 1].FoldingEndMarker = foldingPattern;
+                Tb[range.Start.iLine].FoldingStartMarker = foldingPattern;
             }
 
-            tb.Invalidate();
+            Tb.Invalidate();
         }
         /// <summary>
         /// Finds ranges for given regex pattern
@@ -887,21 +886,19 @@ namespace FastColoredTextBoxNS
         public IEnumerable<Range> GetRanges(string regexPattern, RegexOptions options)
         {
             //get text
-            string text;
-            List<Place> charIndexToPlace;
-            GetText(out text, out charIndexToPlace);
+            GetText(out string? text, out List<Place>? charIndexToPlace);
             //create regex
             Regex regex = new Regex(regexPattern, options);
             //
-            foreach (Match m in regex.Matches(text))
+            foreach (Match m in regex.Matches(text!))
             {
-                Range r = new Range(this.tb);
+                Range r = new Range(Tb);
                 //try get 'range' group, otherwise use group 0
                 Group group = m.Groups["range"];
                 if (!group.Success)
                     group = m.Groups[0];
                 //
-                r.Start = charIndexToPlace[group.Index];
+                r.Start = charIndexToPlace![group.Index];
                 r.End = charIndexToPlace[group.Index + group.Length];
                 yield return r;
             }
@@ -932,15 +929,15 @@ namespace FastColoredTextBoxNS
         {
             Normalize();
 
-            var fts = tb.TextSource as FileTextSource; //<----!!!! ugly
+            var fts = Tb.TextSource as FileTextSource; //<----!!!! ugly
 
             //enumaerate lines
             for (int iLine = Start.iLine; iLine <= End.iLine; iLine++)
             {
                 //
-                bool isLineLoaded = fts != null ? fts.IsLineLoaded(iLine) : true;
+                bool isLineLoaded = fts == null || fts.IsLineLoaded(iLine);
                 //
-                var r = new Range(tb, new Place(0, iLine), new Place(tb[iLine].Count, iLine));
+                var r = new Range(Tb, new Place(0, iLine), new Place(Tb[iLine].Count, iLine));
                 if (iLine == Start.iLine || iLine == End.iLine)
                     r = r.GetIntersectionWith(this);
 
@@ -948,7 +945,7 @@ namespace FastColoredTextBoxNS
                     yield return foundRange;
 
                 if (!isLineLoaded)
-                    fts.UnloadLine(iLine);
+                    fts?.UnloadLine(iLine);
             }
         }
 
@@ -965,15 +962,15 @@ namespace FastColoredTextBoxNS
             //create regex
             Regex regex = new Regex(regexPattern, options);
             //
-            var fts = tb.TextSource as FileTextSource; //<----!!!! ugly
+            var fts = Tb.TextSource as FileTextSource; //<----!!!! ugly
 
             //enumaerate lines
             for (int iLine = End.iLine; iLine >= Start.iLine; iLine--)
             {
                 //
-                bool isLineLoaded = fts != null ? fts.IsLineLoaded(iLine) : true;
+                bool isLineLoaded = fts == null || fts.IsLineLoaded(iLine);
                 //
-                var r = new Range(tb, new Place(0, iLine), new Place(tb[iLine].Count, iLine));
+                var r = new Range(Tb, new Place(0, iLine), new Place(Tb[iLine].Count, iLine));
                 if (iLine == Start.iLine || iLine == End.iLine)
                     r = r.GetIntersectionWith(this);
 
@@ -986,7 +983,7 @@ namespace FastColoredTextBoxNS
                     yield return list[i];
 
                 if (!isLineLoaded)
-                    fts.UnloadLine(iLine);
+                    fts?.UnloadLine(iLine);
             }
         }
 
@@ -997,19 +994,17 @@ namespace FastColoredTextBoxNS
         public IEnumerable<Range> GetRanges(Regex regex)
         {
             //get text
-            string text;
-            List<Place> charIndexToPlace;
-            GetText(out text, out charIndexToPlace);
+            GetText(out string? text, out List<Place>? charIndexToPlace);
             //
-            foreach (Match m in regex.Matches(text))
+            foreach (Match m in regex.Matches(text!))
             {
-                Range r = new Range(this.tb);
+                Range r = new Range(Tb);
                 //try get 'range' group, otherwise use group 0
                 Group group = m.Groups["range"];
                 if (!group.Success)
                     group = m.Groups[0];
                 //
-                r.Start = charIndexToPlace[group.Index];
+                r.Start = charIndexToPlace![group.Index];
                 r.End = charIndexToPlace[group.Index + group.Length];
                 yield return r;
             }
@@ -1022,7 +1017,7 @@ namespace FastColoredTextBoxNS
         {
             try
             {
-                ClearStyle(tb.GetStyleIndexMask(styles));
+                ClearStyle(Tb.GetStyleIndexMask(styles));
             }
             catch {; }
         }
@@ -1042,16 +1037,16 @@ namespace FastColoredTextBoxNS
             for (int y = fromLine; y <= toLine; y++)
             {
                 int fromX = y == fromLine ? fromChar : 0;
-                int toX = y == toLine ? Math.Min(toChar - 1, tb[y].Count - 1) : tb[y].Count - 1;
+                int toX = y == toLine ? Math.Min(toChar - 1, Tb[y].Count - 1) : Tb[y].Count - 1;
                 for (int x = fromX; x <= toX; x++)
                 {
-                    Char c = tb[y][x];
+                    Char c = Tb[y][x];
                     c.style &= ~styleIndex;
-                    tb[y][x] = c;
+                    Tb[y][x] = c;
                 }
             }
             //
-            tb.Invalidate();
+            Tb.Invalidate();
         }
 
         /// <summary>
@@ -1065,21 +1060,21 @@ namespace FastColoredTextBoxNS
             if (fromLine < 0) return;
             //
             for (int y = fromLine; y <= toLine; y++)
-                tb[y].ClearFoldingMarkers();
+                Tb[y].ClearFoldingMarkers();
             //
-            tb.Invalidate();
+            Tb.Invalidate();
         }
 
-        void OnSelectionChanged()
+        private void OnSelectionChanged()
         {
             //clear cache
             cachedTextVersion = -1;
             cachedText = null;
             cachedCharIndexToPlace = null;
             //
-            if (tb.Selection == this)
+            if (Tb.Selection == this)
                 if (updating == 0)
-                    tb.OnSelectionChanged();
+                    Tb.OnSelectionChanged();
         }
 
         /// <summary>
@@ -1131,7 +1126,7 @@ namespace FastColoredTextBoxNS
         {
             Normalize();
             start = new Place(0, start.iLine);
-            end = new Place(tb.GetLineLength(end.iLine), end.iLine);
+            end = new Place(Tb.GetLineLength(end.iLine), end.iLine);
         }
 
         IEnumerator<Place> IEnumerable<Place>.GetEnumerator()
@@ -1152,7 +1147,7 @@ namespace FastColoredTextBoxNS
             for (int y = fromLine; y <= toLine; y++)
             {
                 int fromX = y == fromLine ? fromChar : 0;
-                int toX = y == toLine ? Math.Min(toChar - 1, tb[y].Count - 1) : tb[y].Count - 1;
+                int toX = y == toLine ? Math.Min(toChar - 1, Tb[y].Count - 1) : Tb[y].Count - 1;
                 for (int x = fromX; x <= toX; x++)
                     yield return new Place(x, y);
             }
@@ -1173,7 +1168,7 @@ namespace FastColoredTextBoxNS
                 if (ColumnSelectionMode)
                 {
                     foreach (var p in GetEnumerator_ColumnSelectionMode())
-                        yield return tb[p];
+                        yield return Tb[p];
                     yield break;
                 }
 
@@ -1186,8 +1181,8 @@ namespace FastColoredTextBoxNS
                 for (int y = fromLine; y <= toLine; y++)
                 {
                     int fromX = y == fromLine ? fromChar : 0;
-                    int toX = y == toLine ? Math.Min(toChar - 1, tb[y].Count - 1) : tb[y].Count - 1;
-                    var line = tb[y];
+                    int toX = y == toLine ? Math.Min(toChar - 1, Tb[y].Count - 1) : Tb[y].Count - 1;
+                    var line = Tb[y];
                     for (int x = fromX; x <= toX; x++)
                         yield return line[x];
                 }
@@ -1211,19 +1206,21 @@ namespace FastColoredTextBoxNS
         /// <returns>Range of found fragment</returns>
         public Range GetFragment(Style style, bool allowLineBreaks)
         {
-            var mask = tb.GetStyleIndexMask(new Style[] { style });
+            var mask = Tb.GetStyleIndexMask(new Style[] { style });
             //
-            Range r = new Range(tb);
-            r.Start = Start;
+            Range r = new Range(Tb)
+            {
+                Start = Start
+            };
             //go left, check style
             while (r.GoLeftThroughFolded())
             {
                 if (!allowLineBreaks && r.CharAfterStart == '\n')
                     break;
-                if (r.Start.iChar < tb.GetLineLength(r.Start.iLine))
-                    if ((tb[r.Start].style & mask) == 0)
+                if (r.Start.iChar < Tb.GetLineLength(r.Start.iLine))
+                    if ((Tb[r.Start].style & mask) == 0)
                     {
-                        r.GoRightThroughFolded();
+                        _ = r.GoRightThroughFolded();
                         break;
                     }
             }
@@ -1235,13 +1232,13 @@ namespace FastColoredTextBoxNS
             {
                 if (!allowLineBreaks && r.CharAfterStart == '\n')
                     break;
-                if (r.Start.iChar < tb.GetLineLength(r.Start.iLine))
-                    if ((tb[r.Start].style & mask) == 0)
+                if (r.Start.iChar < Tb.GetLineLength(r.Start.iLine))
+                    if ((Tb[r.Start].style & mask) == 0)
                         break;
             } while (r.GoRightThroughFolded());
             Place endFragment = r.Start;
 
-            return new Range(tb, startFragment, endFragment);
+            return new Range(Tb, startFragment, endFragment);
         }
 
         /// <summary>
@@ -1251,15 +1248,17 @@ namespace FastColoredTextBoxNS
         /// <returns>Range of found fragment</returns>
         public Range GetFragment(string allowedSymbolsPattern, RegexOptions options)
         {
-            Range r = new Range(tb);
-            r.Start = Start;
+            Range r = new Range(Tb)
+            {
+                Start = Start
+            };
             Regex regex = new Regex(allowedSymbolsPattern, options);
             //go left, check symbols
             while (r.GoLeftThroughFolded())
             {
                 if (!regex.IsMatch(r.CharAfterStart.ToString()))
                 {
-                    r.GoRightThroughFolded();
+                    _ = r.GoRightThroughFolded();
                     break;
                 }
             }
@@ -1274,17 +1273,17 @@ namespace FastColoredTextBoxNS
             } while (r.GoRightThroughFolded());
             Place endFragment = r.Start;
 
-            return new Range(tb, startFragment, endFragment);
+            return new Range(Tb, startFragment, endFragment);
         }
 
-        bool IsIdentifierChar(char c)
+        private static bool IsIdentifierChar(char c)
         {
             return char.IsLetterOrDigit(c) || c == '_';
         }
 
-        bool IsSpaceChar(char c)
+        private static bool IsSpaceChar(char c)
         {
-            return c == ' ' || c == '\t';
+            return c is ' ' or '\t';
         }
 
         public void GoWordLeft(bool shift)
@@ -1297,7 +1296,7 @@ namespace FastColoredTextBoxNS
                 return;
             }
 
-            Range range = this.Clone();//to OnSelectionChanged disable
+            Range range = Clone();//to OnSelectionChanged disable
             bool wasSpace = false;
             while (IsSpaceChar(range.CharBeforeStart))
             {
@@ -1312,10 +1311,10 @@ namespace FastColoredTextBoxNS
             }
             if (!wasIdentifier && (!wasSpace || range.CharBeforeStart != '\n'))
                 range.GoLeft(shift);
-            this.Start = range.Start;
-            this.End = range.End;
+            Start = range.Start;
+            End = range.End;
 
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+            if (Tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
                 GoRight(shift);
         }
 
@@ -1329,7 +1328,7 @@ namespace FastColoredTextBoxNS
                 return;
             }
 
-            Range range = this.Clone();//to OnSelectionChanged disable
+            Range range = Clone();//to OnSelectionChanged disable
 
             bool wasNewLine = false;
 
@@ -1365,10 +1364,10 @@ namespace FastColoredTextBoxNS
                         range.GoRight(shift);
             }
 
-            this.Start = range.Start;
-            this.End = range.End;
+            Start = range.Start;
+            End = range.End;
 
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+            if (Tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
                 GoLeft(shift);
         }
 
@@ -1377,8 +1376,8 @@ namespace FastColoredTextBoxNS
             ColumnSelectionMode = false;
 
             start = new Place(0, 0);
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                tb.ExpandBlock(Start.iLine);
+            if (Tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+                Tb.ExpandBlock(Start.iLine);
 
             if (!shift)
                 end = start;
@@ -1390,9 +1389,9 @@ namespace FastColoredTextBoxNS
         {
             ColumnSelectionMode = false;
 
-            start = new Place(tb[tb.LinesCount - 1].Count, tb.LinesCount - 1);
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                tb.ExpandBlock(Start.iLine);
+            start = new Place(Tb[Tb.LinesCount - 1].Count, Tb.LinesCount - 1);
+            if (Tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+                Tb.ExpandBlock(Start.iLine);
 
             if (!shift)
                 end = start;
@@ -1428,10 +1427,10 @@ namespace FastColoredTextBoxNS
             var rect = Bounds;
             for (int y = rect.iStartLine; y <= rect.iEndLine; y++)
             {
-                if (rect.iStartChar > tb[y].Count && !includeEmpty)
+                if (rect.iStartChar > Tb[y].Count && !includeEmpty)
                     continue;
 
-                var r = new Range(tb, rect.iStartChar, y, Math.Min(rect.iEndChar, tb[y].Count), y);
+                var r = new Range(Tb, rect.iStartChar, y, Math.Min(rect.iEndChar, Tb[y].Count), y);
                 yield return r;
             }
         }
@@ -1445,29 +1444,29 @@ namespace FastColoredTextBoxNS
         {
             get
             {
-                if (tb.ReadOnly) return true;
+                if (Tb.ReadOnly) return true;
 
-                ReadOnlyStyle readonlyStyle = null;
-                foreach (var style in tb.Styles)
-                    if (style is ReadOnlyStyle)
+                ReadOnlyStyle? readonlyStyle = null;
+                foreach (var style in Tb.Styles)
+                    if (style is ReadOnlyStyle style1)
                     {
-                        readonlyStyle = (ReadOnlyStyle)style;
+                        readonlyStyle = style1;
                         break;
                     }
 
                 if (readonlyStyle != null)
                 {
-                    var si = ToStyleIndex(tb.GetStyleIndex(readonlyStyle));
+                    var si = ToStyleIndex(Tb.GetStyleIndex(readonlyStyle));
 
                     if (IsEmpty)
                     {
                         //check previous and next chars
-                        var line = tb[start.iLine];
+                        var line = Tb[start.iLine];
                         if (columnSelectionMode)
                         {
                             foreach (var sr in GetSubRanges(false))
                             {
-                                line = tb[sr.start.iLine];
+                                line = Tb[sr.start.iLine];
                                 if (sr.start.iChar < line.Count && sr.start.iChar > 0)
                                 {
                                     var left = line[sr.start.iChar - 1];
@@ -1498,11 +1497,11 @@ namespace FastColoredTextBoxNS
             set
             {
                 //find exists ReadOnlyStyle of style buffer
-                ReadOnlyStyle readonlyStyle = null;
-                foreach (var style in tb.Styles)
-                    if (style is ReadOnlyStyle)
+                ReadOnlyStyle? readonlyStyle = null;
+                foreach (var style in Tb.Styles)
+                    if (style is ReadOnlyStyle style1)
                     {
-                        readonlyStyle = (ReadOnlyStyle)style;
+                        readonlyStyle = style1;
                         break;
                     }
 
@@ -1524,7 +1523,7 @@ namespace FastColoredTextBoxNS
         /// <returns></returns>
         public bool IsReadOnlyLeftChar()
         {
-            if (tb.ReadOnly) return true;
+            if (Tb.ReadOnly) return true;
 
             var r = Clone();
 
@@ -1544,12 +1543,12 @@ namespace FastColoredTextBoxNS
         /// <returns></returns>
         public bool IsReadOnlyRightChar()
         {
-            if (tb.ReadOnly) return true;
+            if (Tb.ReadOnly) return true;
 
             var r = Clone();
 
             r.Normalize();
-            if (r.end.iChar >= tb[end.iLine].Count) return false;
+            if (r.end.iChar >= Tb[end.iLine].Count) return false;
             if (ColumnSelectionMode)
                 r.GoRight_ColumnSelectionMode();
             else
@@ -1562,35 +1561,35 @@ namespace FastColoredTextBoxNS
         {
             if (backward)
             {
-                var r = new Range(this.tb, startPlace, startPlace);
+                var r = new Range(Tb, startPlace, startPlace);
                 while (r.GoLeft() && r.start >= Start)
                 {
-                    if (r.Start.iChar < tb[r.Start.iLine].Count)
+                    if (r.Start.iChar < Tb[r.Start.iLine].Count)
                         yield return r.Start;
                 }
 
-                r = new Range(this.tb, End, End);
+                r = new Range(Tb, End, End);
                 while (r.GoLeft() && r.start >= startPlace)
                 {
-                    if (r.Start.iChar < tb[r.Start.iLine].Count)
+                    if (r.Start.iChar < Tb[r.Start.iLine].Count)
                         yield return r.Start;
                 }
             }
             else
             {
-                var r = new Range(this.tb, startPlace, startPlace);
+                var r = new Range(Tb, startPlace, startPlace);
                 if (startPlace < End)
                     do
                     {
-                        if (r.Start.iChar < tb[r.Start.iLine].Count)
+                        if (r.Start.iChar < Tb[r.Start.iLine].Count)
                             yield return r.Start;
                     } while (r.GoRight());
 
-                r = new Range(this.tb, Start, Start);
+                r = new Range(Tb, Start, Start);
                 if (r.Start < startPlace)
                     do
                     {
-                        if (r.Start.iChar < tb[r.Start.iLine].Count)
+                        if (r.Start.iChar < Tb[r.Start.iLine].Count)
                             yield return r.Start;
                     } while (r.GoRight() && r.Start < startPlace);
             }
@@ -1601,12 +1600,12 @@ namespace FastColoredTextBoxNS
         private Range GetIntersectionWith_ColumnSelectionMode(Range range)
         {
             if (range.Start.iLine != range.End.iLine)
-                return new Range(tb, Start, Start);
+                return new Range(Tb, Start, Start);
             var rect = Bounds;
             if (range.Start.iLine < rect.iStartLine || range.Start.iLine > rect.iEndLine)
-                return new Range(tb, Start, Start);
+                return new Range(Tb, Start, Start);
 
-            return new Range(tb, rect.iStartChar, range.Start.iLine, rect.iEndChar, range.Start.iLine).GetIntersectionWith(range);
+            return new Range(Tb, rect.iStartChar, range.Start.iLine, rect.iEndChar, range.Start.iLine).GetIntersectionWith(range);
         }
 
         private bool GoRightThroughFolded_ColumnSelectionMode()
@@ -1614,7 +1613,7 @@ namespace FastColoredTextBoxNS
             var boundes = Bounds;
             var endOfLines = true;
             for (int iLine = boundes.iStartLine; iLine <= boundes.iEndLine; iLine++)
-                if (boundes.iEndChar < tb[iLine].Count)
+                if (boundes.iEndChar < Tb[iLine].Count)
                 {
                     endOfLines = false;
                     break;
@@ -1644,7 +1643,7 @@ namespace FastColoredTextBoxNS
             {
                 for (int x = bounds.iStartChar; x < bounds.iEndChar; x++)
                 {
-                    if (x < tb[y].Count)
+                    if (x < Tb[y].Count)
                         yield return new Place(x, y);
                 }
             }
@@ -1662,16 +1661,18 @@ namespace FastColoredTextBoxNS
                 {
                     for (int x = bounds.iStartChar; x < bounds.iEndChar; x++)
                     {
-                        if (x < tb[y].Count)
-                            sb.Append(tb[y][x].c);
+                        if (x < Tb[y].Count)
+                            _ = sb.Append(Tb[y][x].c);
                     }
                     if (bounds.iEndLine != bounds.iStartLine && y != bounds.iEndLine)
-                        sb.AppendLine();
+                        _ = sb.AppendLine();
                 }
 
                 return sb.ToString();
             }
         }
+
+        public FastColoredTextBox Tb => tb;
 
         private int Length_ColumnSelectionMode(bool withNewLines)
         {
@@ -1683,7 +1684,7 @@ namespace FastColoredTextBoxNS
             {
                 for (int x = bounds.iStartChar; x < bounds.iEndChar; x++)
                 {
-                    if (x < tb[y].Count)
+                    if (x < Tb[y].Count)
                         cnt++;
                 }
                 if (withNewLines && bounds.iEndLine != bounds.iStartLine && y != bounds.iEndLine)
@@ -1695,13 +1696,13 @@ namespace FastColoredTextBoxNS
 
         internal void GoDown_ColumnSelectionMode()
         {
-            var iLine = tb.FindNextVisibleLine(End.iLine);
+            var iLine = Tb.FindNextVisibleLine(End.iLine);
             End = new Place(End.iChar, iLine);
         }
 
         internal void GoUp_ColumnSelectionMode()
         {
-            var iLine = tb.FindPrevVisibleLine(End.iLine);
+            var iLine = Tb.FindPrevVisibleLine(End.iLine);
             End = new Place(End.iChar, iLine);
         }
 

@@ -12,113 +12,112 @@ namespace FastColoredTextBoxNS
     {
         //styles
         protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
-        public readonly Style BlueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
-        public readonly Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        public readonly Style BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
-        public readonly Style BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
-        public readonly Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
-        public readonly Style GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
-        public readonly Style MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
-        public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
-        public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
-        public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
+        private readonly Style? blueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
+        private readonly Style? blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        private readonly Style? boldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
+        private readonly Style? brownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
+        private readonly Style? grayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
+        private readonly Style? greenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
+        private readonly Style? magentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
+        private readonly Style? maroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
+        private readonly Style? redStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
+        private readonly Style? blackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
         //
-        protected readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames =
-            new Dictionary<string, SyntaxDescriptor>();
+        private readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames = new Dictionary<string, SyntaxDescriptor>();
 
-        protected readonly List<Style> resilientStyles = new List<Style>(5);
+        private readonly List<Style> resilientStyles = new List<Style>(5);
 
-        protected Regex CSharpAttributeRegex,
-                      CSharpClassNameRegex;
+        private Regex? cSharpClassNameRegex;
 
-        protected Regex CSharpCommentRegex1,
-                      CSharpCommentRegex2,
-                      CSharpCommentRegex3;
+        private Regex? cSharpCommentRegex3;
 
-        protected Regex CSharpKeywordRegex;
-        protected Regex CSharpNumberRegex;
-        protected Regex CSharpStringRegex;
+        private Regex? cSharpKeywordRegex;
+        private Regex? cSharpNumberRegex;
+        private Regex? cSharpStringRegex;
 
-        protected Regex HTMLAttrRegex,
-                      HTMLAttrValRegex,
-                      HTMLCommentRegex1,
-                      HTMLCommentRegex2;
+        private Regex? hTMLCommentRegex2;
 
-        protected Regex HTMLEndTagRegex;
+        private Regex? hTMLEndTagRegex;
 
-        protected Regex HTMLEntityRegex,
-                      HTMLTagContentRegex;
+        private Regex? hTMLTagContentRegex;
 
-        protected Regex HTMLTagNameRegex;
-        protected Regex HTMLTagRegex;
+        private Regex? hTMLTagNameRegex;
+        private Regex? hTMLTagRegex;
 
-        protected Regex XMLAttrRegex,
-                      XMLAttrValRegex,
-                      XMLCommentRegex1,
-                      XMLCommentRegex2;
+        private Regex? xMLCommentRegex2;
 
-        protected Regex XMLEndTagRegex;
+        private Regex? xMLEndTagRegex;
 
-        protected Regex XMLEntityRegex,
-                      XMLTagContentRegex;
+        private Regex? xMLTagContentRegex;
 
-        protected Regex XMLTagNameRegex;
-        protected Regex XMLTagRegex;
-        protected Regex XMLCDataRegex;
-        protected Regex XMLFoldingRegex;
+        private Regex? xMLTagNameRegex;
+        private Regex? xMLTagRegex;
+        private Regex? xMLCDataRegex;
+        private Regex? xMLFoldingRegex;
 
-        protected Regex JScriptCommentRegex1,
-                      JScriptCommentRegex2,
-                      JScriptCommentRegex3;
+        private Regex? jScriptCommentRegex3;
 
-        protected Regex JScriptKeywordRegex;
-        protected Regex JScriptNumberRegex;
-        protected Regex JScriptStringRegex;
+        private Regex? jScriptKeywordRegex;
+        private Regex? jScriptNumberRegex;
+        private Regex? jScriptStringRegex;
 
-        protected Regex JSONKeywordRegex;
-        protected Regex JSONNumberRegex;
-        protected Regex JSONStringRegex;
+        private Regex? jSONKeywordRegex;
+        private Regex? jSONNumberRegex;
+        private Regex? jSONStringRegex;
 
-        protected Regex LuaCommentRegex1,
-                      LuaCommentRegex2,
-                      LuaCommentRegex3;
+        private Regex? luaCommentRegex3;
 
-        protected Regex LuaKeywordRegex;
-        protected Regex LuaNumberRegex;
-        protected Regex LuaStringRegex;
-        protected Regex LuaFunctionsRegex;
+        private Regex? luaKeywordRegex;
+        private Regex? luaNumberRegex;
+        private Regex? luaStringRegex;
+        private Regex? luaFunctionsRegex;
 
-        protected Regex PHPCommentRegex1,
-                      PHPCommentRegex2,
-                      PHPCommentRegex3;
+        private Regex? pHPCommentRegex3;
 
-        protected Regex PHPKeywordRegex1,
-                      PHPKeywordRegex2,
-                      PHPKeywordRegex3;
+        private Regex? pHPKeywordRegex3;
 
-        protected Regex PHPNumberRegex;
-        protected Regex PHPStringRegex;
-        protected Regex PHPVarRegex;
+        private Regex? pHPNumberRegex;
+        private Regex? pHPStringRegex;
+        private Regex? pHPVarRegex;
 
-        protected Regex SQLCommentRegex1,
-                      SQLCommentRegex2,
-                      SQLCommentRegex3, 
-                      SQLCommentRegex4;
+        private Regex? sQLCommentRegex4;
 
-        protected Regex SQLFunctionsRegex;
-        protected Regex SQLKeywordsRegex;
-        protected Regex SQLNumberRegex;
-        protected Regex SQLStatementsRegex;
-        protected Regex SQLStringRegex;
-        protected Regex SQLTypesRegex;
-        protected Regex SQLVarRegex;
-        protected Regex VBClassNameRegex;
-        protected Regex VBCommentRegex;
-        protected Regex VBKeywordRegex;
-        protected Regex VBNumberRegex;
-        protected Regex VBStringRegex;
+        private Regex? sQLFunctionsRegex;
+        private Regex? sQLKeywordsRegex;
+        private Regex? sQLNumberRegex;
+        private Regex? sQLStatementsRegex;
+        private Regex? sQLStringRegex;
+        private Regex? sQLTypesRegex;
+        private Regex? sQLVarRegex;
+        private Regex? vBClassNameRegex;
+        private Regex? vBCommentRegex;
+        private Regex? vBKeywordRegex;
+        private Regex? vBNumberRegex;
+        private Regex? vBStringRegex;
 
         protected FastColoredTextBox currentTb;
+        private Regex? cSharpAttributeRegex;
+        private Regex? cSharpCommentRegex1;
+        private Regex? cSharpCommentRegex2;
+        private Regex? hTMLAttrRegex;
+        private Regex? hTMLAttrValRegex;
+        private Regex? hTMLCommentRegex1;
+        private Regex? hTMLEntityRegex;
+        private Regex? xMLAttrRegex;
+        private Regex? xMLAttrValRegex;
+        private Regex? xMLCommentRegex1;
+        private Regex? xMLEntityRegex;
+        private Regex? jScriptCommentRegex1;
+        private Regex? jScriptCommentRegex2;
+        private Regex? luaCommentRegex1;
+        private Regex? luaCommentRegex2;
+        private Regex? pHPCommentRegex1;
+        private Regex? pHPCommentRegex2;
+        private Regex? pHPKeywordRegex1;
+        private Regex? pHPKeywordRegex2;
+        private Regex? sQLCommentRegex1;
+        private Regex? sQLCommentRegex2;
+        private Regex? sQLCommentRegex3;
 
         public static RegexOptions RegexCompiledOption
         {
@@ -131,7 +130,8 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        public SyntaxHighlighter(FastColoredTextBox currentTb) {
+        public SyntaxHighlighter(FastColoredTextBox currentTb)
+        {
             this.currentTb = currentTb;
         }
 
@@ -139,8 +139,10 @@ namespace FastColoredTextBoxNS
 
         public void Dispose()
         {
-            foreach (SyntaxDescriptor desc in descByXMLfileNames.Values)
+            foreach (SyntaxDescriptor desc in DescByXMLfileNames.Values)
                 desc.Dispose();
+
+            GC.SuppressFinalize(this);
         }
 
         #endregion
@@ -187,60 +189,61 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Highlights syntax for given XML description file
         /// </summary>
-        public virtual void HighlightSyntax(string XMLdescriptionFile, Range range)
+        public virtual void HighlightSyntax(string xMLdescriptionFile, Range range)
         {
-            SyntaxDescriptor desc = null;
-            if (!descByXMLfileNames.TryGetValue(XMLdescriptionFile, out desc))
+            if (!DescByXMLfileNames.TryGetValue(xMLdescriptionFile, out SyntaxDescriptor? desc))
             {
                 var doc = new XmlDocument();
-                string file = XMLdescriptionFile;
+                string file = xMLdescriptionFile;
                 if (!File.Exists(file))
                     file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(file));
 
                 doc.LoadXml(File.ReadAllText(file));
                 desc = ParseXmlDescription(doc);
-                descByXMLfileNames[XMLdescriptionFile] = desc;
+                DescByXMLfileNames[xMLdescriptionFile] = desc;
             }
 
             HighlightSyntax(desc, range);
         }
 
-        public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        public virtual void AutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
-            var tb = (sender as FastColoredTextBox);
-            Language language = tb.Language;
-            switch (language)
+            if (sender is FastColoredTextBox tb)
             {
-                case Language.CSharp:
-                    CSharpAutoIndentNeeded(sender, args);
-                    break;
-                case Language.VB:
-                    VBAutoIndentNeeded(sender, args);
-                    break;
-                case Language.HTML:
-                    HTMLAutoIndentNeeded(sender, args);
-                    break;
-                case Language.XML:
-                    XMLAutoIndentNeeded(sender, args);
-                    break;
-                case Language.SQL:
-                    SQLAutoIndentNeeded(sender, args);
-                    break;
-                case Language.PHP:
-                    PHPAutoIndentNeeded(sender, args);
-                    break;
-                case Language.JS:
-                    CSharpAutoIndentNeeded(sender, args);
-                    break; //JS like C#
-                case Language.Lua:
-                    LuaAutoIndentNeeded(sender, args);
-                    break;
-                default:
-                    break;
+                Language language = tb.Language;
+                switch (language)
+                {
+                    case Language.CSharp:
+                        CSharpAutoIndentNeeded(sender, args);
+                        break;
+                    case Language.VB:
+                        VBAutoIndentNeeded(sender, args);
+                        break;
+                    case Language.HTML:
+                        HTMLAutoIndentNeeded(sender, args);
+                        break;
+                    case Language.XML:
+                        XMLAutoIndentNeeded(sender, args);
+                        break;
+                    case Language.SQL:
+                        SQLAutoIndentNeeded(sender, args);
+                        break;
+                    case Language.PHP:
+                        PHPAutoIndentNeeded(sender, args);
+                        break;
+                    case Language.JS:
+                        CSharpAutoIndentNeeded(sender, args);
+                        break; //JS like C#
+                    case Language.Lua:
+                        LuaAutoIndentNeeded(sender, args);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
-        protected void PHPAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        protected void PHPAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             /*
             FastColoredTextBox tb = sender as FastColoredTextBox;
@@ -270,25 +273,25 @@ namespace FastColoredTextBoxNS
                 }
         }
 
-        protected void SQLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        protected void SQLAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
-            var tb = sender as FastColoredTextBox;
-            tb.CalcAutoIndentShiftByCodeFolding(sender, args);
+            if (sender is FastColoredTextBox tb)
+                tb.CalcAutoIndentShiftByCodeFolding(sender, args);
         }
 
-        protected void HTMLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        protected void HTMLAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
-            var tb = sender as FastColoredTextBox;
-            tb.CalcAutoIndentShiftByCodeFolding(sender, args);
+            if (sender is FastColoredTextBox tb)
+                tb.CalcAutoIndentShiftByCodeFolding(sender, args);
         }
 
-        protected void XMLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        protected void XMLAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
-            var tb = sender as FastColoredTextBox;
-            tb.CalcAutoIndentShiftByCodeFolding(sender, args);
+            if (sender is FastColoredTextBox tb)
+                tb.CalcAutoIndentShiftByCodeFolding(sender, args);
         }
 
-        protected void VBAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        protected void VBAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             //end of block
             if (Regex.IsMatch(args.LineText, @"^\s*(End|EndIf|Next|Loop)\b", RegexOptions.IgnoreCase))
@@ -330,7 +333,7 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        protected void CSharpAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        protected void CSharpAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             //block {}
             if (Regex.IsMatch(args.LineText, @"^[^""']*\{.*\}[^""']*$"))
@@ -383,7 +386,7 @@ namespace FastColoredTextBoxNS
         public virtual void AddXmlDescription(string descriptionFileName, XmlDocument doc)
         {
             SyntaxDescriptor desc = ParseXmlDescription(doc);
-            descByXMLfileNames[descriptionFileName] = desc;
+            DescByXMLfileNames[descriptionFileName] = desc;
         }
 
         /// <summary>
@@ -395,109 +398,148 @@ namespace FastColoredTextBoxNS
         /// <param name="style">Style to add</param>
         public virtual void AddResilientStyle(Style style)
         {
-            if (resilientStyles.Contains(style)) return;
-            currentTb.CheckStylesBufferSize(); // Prevent buffer overflow
-            resilientStyles.Add(style);
+            if (ResilientStyles.Contains(style))
+                return;
+            _ = currentTb.CheckStylesBufferSize(); // Prevent buffer overflow
+            ResilientStyles.Add(style);
         }
 
         public static SyntaxDescriptor ParseXmlDescription(XmlDocument doc)
         {
             var desc = new SyntaxDescriptor();
-            XmlNode brackets = doc.SelectSingleNode("doc/brackets");
-            if (brackets != null)
+            XmlNode? brackets = doc.SelectSingleNode("doc/brackets");
+            if (brackets != null && brackets.Attributes != null)
             {
-                if (brackets.Attributes["left"] == null || brackets.Attributes["right"] == null ||
-                    brackets.Attributes["left"].Value == "" || brackets.Attributes["right"].Value == "")
+                XmlAttribute? leftAttribute = brackets.Attributes["left"];
+                XmlAttribute? rightAttribute = brackets.Attributes["right"];
+                if (leftAttribute == null || rightAttribute == null ||
+                    leftAttribute.Value == "" || rightAttribute.Value == "")
                 {
                     desc.leftBracket = '\x0';
                     desc.rightBracket = '\x0';
                 }
                 else
                 {
-                    desc.leftBracket = brackets.Attributes["left"].Value[0];
-                    desc.rightBracket = brackets.Attributes["right"].Value[0];
+                    desc.leftBracket = leftAttribute.Value[0];
+                    desc.rightBracket = rightAttribute.Value[0];
                 }
 
-                if (brackets.Attributes["left2"] == null || brackets.Attributes["right2"] == null ||
-                    brackets.Attributes["left2"].Value == "" || brackets.Attributes["right2"].Value == "")
+                XmlAttribute? left2Attribute = brackets.Attributes["left2"];
+                XmlAttribute? right2Attribute = brackets.Attributes["right2"];
+                if (left2Attribute == null || right2Attribute == null ||
+                    left2Attribute.Value == "" || right2Attribute.Value == "")
                 {
                     desc.leftBracket2 = '\x0';
                     desc.rightBracket2 = '\x0';
                 }
                 else
                 {
-                    desc.leftBracket2 = brackets.Attributes["left2"].Value[0];
-                    desc.rightBracket2 = brackets.Attributes["right2"].Value[0];
+                    desc.leftBracket2 = left2Attribute.Value[0];
+                    desc.rightBracket2 = right2Attribute.Value[0];
                 }
 
-                if (brackets.Attributes["strategy"] == null || brackets.Attributes["strategy"].Value == "")
+                XmlAttribute? strategyAttribute = brackets.Attributes["strategy"];
+                if (strategyAttribute == null || strategyAttribute.Value == "")
                     desc.bracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
                 else
-                    desc.bracketsHighlightStrategy = (BracketsHighlightStrategy)Enum.Parse(typeof(BracketsHighlightStrategy), brackets.Attributes["strategy"].Value);
+                    desc.bracketsHighlightStrategy = (BracketsHighlightStrategy)Enum.Parse(typeof(BracketsHighlightStrategy), strategyAttribute.Value);
             }
 
             var styleByName = new Dictionary<string, Style>();
 
-            foreach (XmlNode style in doc.SelectNodes("doc/style"))
-            {
-                Style s = ParseStyle(style);
-                styleByName[style.Attributes["name"].Value] = s;
-                desc.styles.Add(s);
-            }
-            foreach (XmlNode rule in doc.SelectNodes("doc/rule"))
-                desc.rules.Add(ParseRule(rule, styleByName));
-            foreach (XmlNode folding in doc.SelectNodes("doc/folding"))
-                desc.foldings.Add(ParseFolding(folding));
+            XmlNodeList? styles = doc.SelectNodes("doc/style");
+            if (styles != null)
+                foreach (XmlNode style in styles)
+                {
+                    Style s = ParseStyle(style);
+
+                    if (style.Attributes == null)
+                        continue;
+
+                    XmlAttribute? styleName = style.Attributes["name"];
+                    if (styleName != null)
+                        styleByName[styleName.Value] = s;
+                    desc.styles.Add(s);
+                }
+
+            XmlNodeList? rules = doc.SelectNodes("doc/rule");
+
+            if (rules != null)
+                foreach (XmlNode rule in rules)
+                    desc.rules.Add(ParseRule(rule, styleByName));
+
+            XmlNodeList? foldings = doc.SelectNodes("doc/folding");
+
+            if (foldings != null)
+                foreach (XmlNode folding in foldings)
+                    desc.foldings.Add(ParseFolding(folding));
 
             return desc;
         }
 
         protected static FoldingDesc ParseFolding(XmlNode foldingNode)
         {
-            var folding = new FoldingDesc();
-            //regex
-            folding.startMarkerRegex = foldingNode.Attributes["start"].Value;
-            folding.finishMarkerRegex = foldingNode.Attributes["finish"].Value;
+            if (foldingNode.Attributes == null)
+                throw new InvalidOperationException();
+            XmlAttribute? startAttribute = foldingNode.Attributes["start"];
+            XmlAttribute? finishAttribute = foldingNode.Attributes["finish"];
+
+            if (startAttribute == null || finishAttribute == null)
+                throw new InvalidOperationException();
+
+            var folding = new FoldingDesc
+            {
+                //regex
+                StartMarkerRegex = startAttribute.Value,
+                FinishMarkerRegex = finishAttribute.Value
+            };
             //options
-            XmlAttribute optionsA = foldingNode.Attributes["options"];
+            XmlAttribute? optionsA = foldingNode.Attributes["options"];
             if (optionsA != null)
-                folding.options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
+                folding.Options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
 
             return folding;
         }
 
         protected static RuleDesc ParseRule(XmlNode ruleNode, Dictionary<string, Style> styles)
         {
-            var rule = new RuleDesc();
-            rule.pattern = ruleNode.InnerText;
-            //
-            XmlAttribute styleA = ruleNode.Attributes["style"];
-            XmlAttribute optionsA = ruleNode.Attributes["options"];
+            var rule = new RuleDesc
+            {
+                Pattern = ruleNode.InnerText
+            };
+
+            if (ruleNode.Attributes == null)
+                throw new InvalidOperationException();
+
+            XmlAttribute? styleA = ruleNode.Attributes["style"];
+            XmlAttribute? optionsA = ruleNode.Attributes["options"];
             //Style
             if (styleA == null)
                 throw new Exception("Rule must contain style name.");
             if (!styles.ContainsKey(styleA.Value))
                 throw new Exception("Style '" + styleA.Value + "' is not found.");
-            rule.style = styles[styleA.Value];
+            rule.Style = styles[styleA.Value];
             //options
             if (optionsA != null)
-                rule.options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
+                rule.Options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
 
             return rule;
         }
 
         protected static Style ParseStyle(XmlNode styleNode)
         {
-            XmlAttribute typeA = styleNode.Attributes["type"];
-            XmlAttribute colorA = styleNode.Attributes["color"];
-            XmlAttribute backColorA = styleNode.Attributes["backColor"];
-            XmlAttribute fontStyleA = styleNode.Attributes["fontStyle"];
-            XmlAttribute nameA = styleNode.Attributes["name"];
+            if (styleNode.Attributes == null)
+                throw new InvalidOperationException();
+
+            XmlAttribute? colorA = styleNode.Attributes["color"];
+            XmlAttribute? backColorA = styleNode.Attributes["backColor"];
+            XmlAttribute? fontStyleA = styleNode.Attributes["fontStyle"];
+
             //colors
-            SolidBrush foreBrush = null;
+            SolidBrush? foreBrush = null;
             if (colorA != null)
                 foreBrush = new SolidBrush(ParseColor(colorA.Value));
-            SolidBrush backBrush = null;
+            SolidBrush? backBrush = null;
             if (backColorA != null)
                 backBrush = new SolidBrush(ParseColor(backColorA.Value));
             //fontStyle
@@ -514,9 +556,9 @@ namespace FastColoredTextBoxNS
             {
                 if (s.Length <= 7)
                     return Color.FromArgb(255,
-                                          Color.FromArgb(Int32.Parse(s.Substring(1), NumberStyles.AllowHexSpecifier)));
+                                          Color.FromArgb(int.Parse(s[1..], NumberStyles.AllowHexSpecifier)));
                 else
-                    return Color.FromArgb(Int32.Parse(s.Substring(1), NumberStyles.AllowHexSpecifier));
+                    return Color.FromArgb(int.Parse(s[1..], NumberStyles.AllowHexSpecifier));
             }
             else
                 return Color.FromName(s);
@@ -525,35 +567,35 @@ namespace FastColoredTextBoxNS
         public void HighlightSyntax(SyntaxDescriptor desc, Range range)
         {
             //set style order
-            range.tb.ClearStylesBuffer();
+            range.Tb.ClearStylesBuffer();
             for (int i = 0; i < desc.styles.Count; i++)
-                range.tb.Styles[i] = desc.styles[i];
+                range.Tb.Styles[i] = desc.styles[i];
             // add resilient styles
             int l = desc.styles.Count;
-            for (int i = 0; i < resilientStyles.Count; i++)
-                range.tb.Styles[l + i] = resilientStyles[i];
+            for (int i = 0; i < ResilientStyles.Count; i++)
+                range.Tb.Styles[l + i] = ResilientStyles[i];
             //brackets
-            char[] oldBrackets = RememberBrackets(range.tb);
-            range.tb.LeftBracket = desc.leftBracket;
-            range.tb.RightBracket = desc.rightBracket;
-            range.tb.LeftBracket2 = desc.leftBracket2;
-            range.tb.RightBracket2 = desc.rightBracket2;
+            char[] oldBrackets = RememberBrackets(range.Tb);
+            range.Tb.LeftBracket = desc.leftBracket;
+            range.Tb.RightBracket = desc.rightBracket;
+            range.Tb.LeftBracket2 = desc.leftBracket2;
+            range.Tb.RightBracket2 = desc.rightBracket2;
             //clear styles of range
             range.ClearStyle(desc.styles.ToArray());
             //highlight syntax
             foreach (RuleDesc rule in desc.rules)
-                range.SetStyle(rule.style, rule.Regex);
+                range.SetStyle(rule.Style, rule.Regex);
             //clear folding
             range.ClearFoldingMarkers();
             //folding markers
             foreach (FoldingDesc folding in desc.foldings)
-                range.SetFoldingMarkers(folding.startMarkerRegex, folding.finishMarkerRegex, folding.options);
+                range.SetFoldingMarkers(folding.StartMarkerRegex, folding.FinishMarkerRegex, folding.Options);
 
             //
-            RestoreBrackets(range.tb, oldBrackets);
+            RestoreBrackets(range.Tb, oldBrackets);
         }
 
-        protected void RestoreBrackets(FastColoredTextBox tb, char[] oldBrackets)
+        protected static void RestoreBrackets(FastColoredTextBox tb, char[] oldBrackets)
         {
             tb.LeftBracket = oldBrackets[0];
             tb.RightBracket = oldBrackets[1];
@@ -561,7 +603,7 @@ namespace FastColoredTextBoxNS
             tb.RightBracket2 = oldBrackets[3];
         }
 
-        protected char[] RememberBrackets(FastColoredTextBox tb)
+        protected static char[] RememberBrackets(FastColoredTextBox tb)
         {
             return new[] { tb.LeftBracket, tb.RightBracket, tb.LeftBracket2, tb.RightBracket2 };
         }
@@ -702,23 +744,49 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void CSharpSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = "//";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '{';
-            range.tb.RightBracket2 = '}';
-            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            range.Tb.CommentPrefix = "//";
+            range.Tb.LeftBracket = '(';
+            range.Tb.RightBracket = ')';
+            range.Tb.LeftBracket2 = '{';
+            range.Tb.RightBracket2 = '}';
+            range.Tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
 
-            range.tb.AutoIndentCharsPatterns
+            range.Tb.AutoIndentCharsPatterns
                 = @"
 ^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;=]+);
 ^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);
 ";
+
+            if (StringStyle == null || CommentStyle == null || NumberStyle == null || AttributeStyle == null || ClassNameStyle == null || KeywordStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle);
             //
-            if (CSharpStringRegex == null)
+            if (CSharpStringRegex == null ||
+                 CSharpCommentRegex1 == null ||
+                 CSharpCommentRegex2 == null ||
+                 CSharpCommentRegex3 == null ||
+                 CSharpNumberRegex == null ||
+                 CSharpAttributeRegex == null ||
+                 CSharpClassNameRegex == null ||
+                 CSharpKeywordRegex == null ||
+                 HTMLTagContentRegex == null ||
+                 CommentTagStyle == null)
                 InitCShaprRegex();
+
+            if (CSharpStringRegex == null ||
+                CSharpCommentRegex1 == null ||
+                CSharpCommentRegex2 == null ||
+                CSharpCommentRegex3 == null ||
+                CSharpNumberRegex == null ||
+                CSharpAttributeRegex == null ||
+                CSharpClassNameRegex == null ||
+                CSharpKeywordRegex == null ||
+                HTMLTagContentRegex == null ||
+                CommentTagStyle == null)
+                return;
+
             //string highlighting
             range.SetStyle(StringStyle, CSharpStringRegex);
             //comment highlighting
@@ -785,21 +853,36 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void VBSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = "'";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '\x0';
-            range.tb.RightBracket2 = '\x0';
+            range.Tb.CommentPrefix = "'";
+            range.Tb.LeftBracket = '(';
+            range.Tb.RightBracket = ')';
+            range.Tb.LeftBracket2 = '\x0';
+            range.Tb.RightBracket2 = '\x0';
 
-            range.tb.AutoIndentCharsPatterns
+            range.Tb.AutoIndentCharsPatterns
                 = @"
 ^\s*[\w\.\(\)]+\s*(?<range>=)\s*(?<range>.+)
 ";
+            if (StringStyle == null || CommentStyle == null || NumberStyle == null || AttributeStyle == null || ClassNameStyle == null || KeywordStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, ClassNameStyle, KeywordStyle);
             //
-            if (VBStringRegex == null)
+            if (VBStringRegex == null ||
+              VBCommentRegex == null ||
+              VBNumberRegex == null ||
+              VBClassNameRegex == null ||
+              VBKeywordRegex == null)
                 InitVBRegex();
+
+            if (VBStringRegex == null ||
+                VBCommentRegex == null ||
+                VBNumberRegex == null ||
+                VBClassNameRegex == null ||
+                VBKeywordRegex == null)
+                return;
+
             //string highlighting
             range.SetStyle(StringStyle, VBStringRegex);
             //comment highlighting
@@ -856,18 +939,42 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void HTMLSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = null;
-            range.tb.LeftBracket = '<';
-            range.tb.RightBracket = '>';
-            range.tb.LeftBracket2 = '(';
-            range.tb.RightBracket2 = ')';
-            range.tb.AutoIndentCharsPatterns = @"";
+            range.Tb.CommentPrefix = null;
+            range.Tb.LeftBracket = '<';
+            range.Tb.RightBracket = '>';
+            range.Tb.LeftBracket2 = '(';
+            range.Tb.RightBracket2 = ')';
+            range.Tb.AutoIndentCharsPatterns = @"";
+
+            if (TagBracketStyle == null || CommentStyle == null || TagNameStyle == null || AttributeStyle == null || AttributeValueStyle == null || HtmlEntityStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(CommentStyle, TagBracketStyle, TagNameStyle, AttributeStyle, AttributeValueStyle,
                              HtmlEntityStyle);
             //
-            if (HTMLTagRegex == null)
+            if (HTMLTagRegex == null ||
+                HTMLCommentRegex1 == null ||
+                HTMLCommentRegex2 == null ||
+                HTMLTagRegex == null ||
+                HTMLTagNameRegex == null ||
+                HTMLEndTagRegex == null ||
+                HTMLAttrRegex == null ||
+                HTMLAttrValRegex == null ||
+                HTMLEntityRegex == null)
                 InitHTMLRegex();
+
+            if (HTMLTagRegex == null ||
+                HTMLCommentRegex1 == null ||
+                HTMLCommentRegex2 == null ||
+                HTMLTagRegex == null ||
+                HTMLTagNameRegex == null ||
+                HTMLEndTagRegex == null ||
+                HTMLAttrRegex == null ||
+                HTMLAttrValRegex == null ||
+                HTMLEntityRegex == null)
+                return;
+
             //comment highlighting
             range.SetStyle(CommentStyle, HTMLCommentRegex1);
             range.SetStyle(CommentStyle, HTMLCommentRegex2);
@@ -925,21 +1032,42 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void XMLSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = null;
-            range.tb.LeftBracket = '<';
-            range.tb.RightBracket = '>';
-            range.tb.LeftBracket2 = '(';
-            range.tb.RightBracket2 = ')';
-            range.tb.AutoIndentCharsPatterns = @"";
+            range.Tb.CommentPrefix = null;
+            range.Tb.LeftBracket = '<';
+            range.Tb.RightBracket = '>';
+            range.Tb.LeftBracket2 = '(';
+            range.Tb.RightBracket2 = ')';
+            range.Tb.AutoIndentCharsPatterns = @"";
+
+            if (XmlTagBracketStyle == null || CommentStyle == null || XmlTagNameStyle == null || XmlAttributeStyle == null || XmlAttributeValueStyle == null || XmlEntityStyle == null || XmlCDataStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(CommentStyle, XmlTagBracketStyle, XmlTagNameStyle, XmlAttributeStyle, XmlAttributeValueStyle,
                              XmlEntityStyle, XmlCDataStyle);
 
             //
-            if (XMLTagRegex == null)
-            {
+            if (XMLCDataRegex == null ||
+                XMLCommentRegex1 == null ||
+                XMLCommentRegex2 == null ||
+                XMLTagRegex == null ||
+                XMLTagNameRegex == null ||
+                XMLEndTagRegex == null ||
+                XMLAttrRegex == null ||
+                XMLAttrValRegex == null ||
+                XMLEntityRegex == null)
                 InitXMLRegex();
-            }
+
+            if (XMLCDataRegex == null ||
+                XMLCommentRegex1 == null ||
+                XMLCommentRegex2 == null ||
+                XMLTagRegex == null ||
+                XMLTagNameRegex == null ||
+                XMLEndTagRegex == null ||
+                XMLAttrRegex == null ||
+                XMLAttrValRegex == null ||
+                XMLEntityRegex == null)
+                return;
 
             //xml CData
             range.SetStyle(XmlCDataStyle, XMLCDataRegex);
@@ -977,52 +1105,57 @@ namespace FastColoredTextBoxNS
         {
             var stack = new Stack<XmlFoldingTag>();
             var id = 0;
-            var fctb = range.tb;
+            var fctb = range.Tb;
             //extract opening and closing tags (exclude open-close tags: <TAG/>)
-            foreach (var r in range.GetRanges(XMLFoldingRegex))
-            {
-                var tagName = r.Text;
-                var iLine = r.Start.iLine;
-                //if it is opening tag...
-                if (tagName[0] != '/')
+            if (XMLFoldingRegex != null)
+                foreach (var r in range.GetRanges(XMLFoldingRegex))
                 {
-                    // ...push into stack
-                    var tag = new XmlFoldingTag { Name = tagName, id = id++, startLine = r.Start.iLine };
-                    stack.Push(tag);
-                    // if this line has no markers - set marker
-                    if (string.IsNullOrEmpty(fctb[iLine].FoldingStartMarker))
-                        fctb[iLine].FoldingStartMarker = tag.Marker;
-                }
-                else
-                {
-                    //if it is closing tag - pop from stack
-                    if (stack.Count > 0)
+                    var tagName = r.Text;
+                    var iLine = r.Start.iLine;
+                    //if it is opening tag...
+                    if (tagName[0] != '/')
                     {
-                        var tag = stack.Pop();
-                        //compare line number
-                        if (iLine == tag.startLine)
+                        // ...push into stack
+                        var tag = new XmlFoldingTag { Name = tagName, Id = id++, StartLine = r.Start.iLine };
+                        stack.Push(tag);
+                        // if this line has no markers - set marker
+                        if (string.IsNullOrEmpty(fctb[iLine].FoldingStartMarker))
+                            fctb[iLine].FoldingStartMarker = tag.Marker;
+                    }
+                    else
+                    {
+                        //if it is closing tag - pop from stack
+                        if (stack.Count > 0)
                         {
-                            //remove marker, because same line can not be folding
-                            if (fctb[iLine].FoldingStartMarker == tag.Marker) //was it our marker?
-                                fctb[iLine].FoldingStartMarker = null;
-                        }
-                        else
-                        {
-                            //set end folding marker
-                            if (string.IsNullOrEmpty(fctb[iLine].FoldingEndMarker))
-                                fctb[iLine].FoldingEndMarker = tag.Marker;
+                            var tag = stack.Pop();
+                            //compare line number
+                            if (iLine == tag.StartLine)
+                            {
+                                //remove marker, because same line can not be folding
+                                if (fctb[iLine].FoldingStartMarker == tag.Marker) //was it our marker?
+                                    fctb[iLine].FoldingStartMarker = null;
+                            }
+                            else
+                            {
+                                //set end folding marker
+                                if (string.IsNullOrEmpty(fctb[iLine].FoldingEndMarker))
+                                    fctb[iLine].FoldingEndMarker = tag.Marker;
+                            }
                         }
                     }
                 }
-            }
         }
 
-        class XmlFoldingTag
+        private class XmlFoldingTag
         {
-            public string Name;
-            public int id;
-            public int startLine;
-            public string Marker { get { return Name + id; } }
+            private string? name;
+            private int id;
+            private int startLine;
+            public string Marker { get { return Name + Id; } }
+
+            public string? Name { get => name; set => name = value; }
+            public int Id { get => id; set => id = value; }
+            public int StartLine { get => startLine; set => startLine = value; }
         }
 
         protected void InitSQLRegex()
@@ -1049,19 +1182,47 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void SQLSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = "--";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '\x0';
-            range.tb.RightBracket2 = '\x0';
+            range.Tb.CommentPrefix = "--";
+            range.Tb.LeftBracket = '(';
+            range.Tb.RightBracket = ')';
+            range.Tb.LeftBracket2 = '\x0';
+            range.Tb.RightBracket2 = '\x0';
 
-            range.tb.AutoIndentCharsPatterns = @"";
+            range.Tb.AutoIndentCharsPatterns = @"";
+
+            if (StringStyle == null || CommentStyle == null || NumberStyle == null || VariableStyle == null || StatementsStyle == null || KeywordStyle == null || FunctionsStyle == null || TypesStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(CommentStyle, StringStyle, NumberStyle, VariableStyle, StatementsStyle, KeywordStyle,
                              FunctionsStyle, TypesStyle);
             //
-            if (SQLStringRegex == null)
+            if (SQLStringRegex == null ||
+                SQLCommentRegex1 == null ||
+                SQLCommentRegex2 == null ||
+                SQLCommentRegex3 == null ||
+                SQLCommentRegex4 == null ||
+                SQLNumberRegex == null ||
+                SQLTypesRegex == null ||
+                SQLVarRegex == null ||
+                SQLStatementsRegex == null ||
+                SQLKeywordsRegex == null ||
+                SQLFunctionsRegex == null)
                 InitSQLRegex();
+
+            if (SQLStringRegex == null ||
+                SQLCommentRegex1 == null ||
+                SQLCommentRegex2 == null ||
+                SQLCommentRegex3 == null ||
+                SQLCommentRegex4 == null ||
+                SQLNumberRegex == null ||
+                SQLTypesRegex == null ||
+                SQLVarRegex == null ||
+                SQLStatementsRegex == null ||
+                SQLKeywordsRegex == null ||
+                SQLFunctionsRegex == null)
+                return;
+
             //comment highlighting
             range.SetStyle(CommentStyle, SQLCommentRegex1);
             range.SetStyle(CommentStyle, SQLCommentRegex2);
@@ -1117,24 +1278,48 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void PHPSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = "//";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '{';
-            range.tb.RightBracket2 = '}';
-            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            range.Tb.CommentPrefix = "//";
+            range.Tb.LeftBracket = '(';
+            range.Tb.RightBracket = ')';
+            range.Tb.LeftBracket2 = '{';
+            range.Tb.RightBracket2 = '}';
+            range.Tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+
+            if (StringStyle == null || CommentStyle == null || NumberStyle == null || VariableStyle == null || KeywordStyle2 == null || KeywordStyle == null || KeywordStyle3 == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, VariableStyle, KeywordStyle, KeywordStyle2,
                              KeywordStyle3);
 
-            range.tb.AutoIndentCharsPatterns
+            range.Tb.AutoIndentCharsPatterns
                 = @"
 ^\s*\$[\w\.\[\]\'\""]+\s*(?<range>=)\s*(?<range>[^;]+);
 ";
 
             //
-            if (PHPStringRegex == null)
+            if (PHPStringRegex == null ||
+                PHPCommentRegex1 == null ||
+                PHPCommentRegex2 == null ||
+                PHPCommentRegex3 == null ||
+                PHPNumberRegex == null ||
+                PHPVarRegex == null ||
+                PHPKeywordRegex1 == null ||
+                PHPKeywordRegex2 == null ||
+                PHPKeywordRegex3 == null)
                 InitPHPRegex();
+
+            if (PHPStringRegex == null ||
+                PHPCommentRegex1 == null ||
+                PHPCommentRegex2 == null ||
+                PHPCommentRegex3 == null ||
+                PHPNumberRegex == null ||
+                PHPVarRegex == null ||
+                PHPKeywordRegex1 == null ||
+                PHPKeywordRegex2 == null ||
+                PHPKeywordRegex3 == null)
+                return;
+
             //string highlighting
             range.SetStyle(StringStyle, PHPStringRegex);
             //comment highlighting
@@ -1178,23 +1363,40 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void JScriptSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = "//";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '{';
-            range.tb.RightBracket2 = '}';
-            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            range.Tb.CommentPrefix = "//";
+            range.Tb.LeftBracket = '(';
+            range.Tb.RightBracket = ')';
+            range.Tb.LeftBracket2 = '{';
+            range.Tb.RightBracket2 = '}';
+            range.Tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
 
-            range.tb.AutoIndentCharsPatterns
+            range.Tb.AutoIndentCharsPatterns
                 = @"
 ^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);
 ";
 
+            if (StringStyle == null || CommentStyle == null || NumberStyle == null || AttributeStyle == null || ClassNameStyle == null || KeywordStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle);
             //
-            if (JScriptStringRegex == null)
+            if (JScriptStringRegex == null ||
+                JScriptCommentRegex1 == null ||
+                JScriptCommentRegex2 == null ||
+                JScriptCommentRegex3 == null ||
+                JScriptNumberRegex == null ||
+                JScriptKeywordRegex == null)
                 InitJScriptRegex();
+
+            if (JScriptStringRegex == null ||
+                JScriptCommentRegex1 == null ||
+                JScriptCommentRegex2 == null ||
+                JScriptCommentRegex3 == null ||
+                JScriptNumberRegex == null ||
+                JScriptKeywordRegex == null)
+                return;
+
             //string highlighting
             range.SetStyle(StringStyle, JScriptStringRegex);
             //comment highlighting
@@ -1238,23 +1440,42 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void LuaSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = "--";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '{';
-            range.tb.RightBracket2 = '}';
-            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            range.Tb.CommentPrefix = "--";
+            range.Tb.LeftBracket = '(';
+            range.Tb.RightBracket = ')';
+            range.Tb.LeftBracket2 = '{';
+            range.Tb.RightBracket2 = '}';
+            range.Tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
 
-            range.tb.AutoIndentCharsPatterns
+            range.Tb.AutoIndentCharsPatterns
                 = @"
 ^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>.+)
 ";
 
+            if (StringStyle == null || CommentStyle == null || NumberStyle == null || FunctionsStyle == null || ClassNameStyle == null || KeywordStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle, FunctionsStyle);
             //
-            if (LuaStringRegex == null)
+            if (LuaStringRegex == null ||
+                LuaCommentRegex1 == null ||
+                LuaCommentRegex2 == null ||
+                LuaCommentRegex3 == null ||
+                LuaNumberRegex == null ||
+                LuaKeywordRegex == null ||
+                LuaFunctionsRegex == null)
                 InitLuaRegex();
+
+            if (LuaStringRegex == null ||
+                LuaCommentRegex1 == null ||
+                LuaCommentRegex2 == null ||
+                LuaCommentRegex3 == null ||
+                LuaNumberRegex == null ||
+                LuaKeywordRegex == null ||
+                LuaFunctionsRegex == null)
+                return;
+
             //string highlighting
             range.SetStyle(StringStyle, LuaStringRegex);
             //comment highlighting
@@ -1274,7 +1495,7 @@ namespace FastColoredTextBoxNS
             range.SetFoldingMarkers(@"--\[\[", @"\]\]"); //allow to collapse comment block
         }
 
-        protected void LuaAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        protected void LuaAutoIndentNeeded(object? sender, AutoIndentEventArgs args)
         {
             //end of block
             if (Regex.IsMatch(args.LineText, @"^\s*(end|until)\b"))
@@ -1314,22 +1535,33 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void JSONSyntaxHighlight(Range range)
         {
-            range.tb.LeftBracket = '[';
-            range.tb.RightBracket = ']';
-            range.tb.LeftBracket2 = '{';
-            range.tb.RightBracket2 = '}';
-            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            range.Tb.LeftBracket = '[';
+            range.Tb.RightBracket = ']';
+            range.Tb.LeftBracket2 = '{';
+            range.Tb.RightBracket2 = '}';
+            range.Tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
 
-            range.tb.AutoIndentCharsPatterns
+            range.Tb.AutoIndentCharsPatterns
                 = @"
 ^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);
 ";
 
+            if (StringStyle == null || CommentStyle == null || NumberStyle == null || AttributeStyle == null || ClassNameStyle == null || KeywordStyle == null)
+                return;
+
             //clear style of changed range
             range.ClearStyle(StringStyle, NumberStyle, KeywordStyle);
             //
-            if (JSONStringRegex == null)
+            if (JSONStringRegex == null ||
+                JSONKeywordRegex == null ||
+                JSONNumberRegex == null)
                 InitJSONRegex();
+
+            if (JSONStringRegex == null ||
+                JSONKeywordRegex == null ||
+                JSONNumberRegex == null)
+                return;
+
             //keyword highlighting
             range.SetStyle(KeywordStyle, JSONKeywordRegex);
             //string highlighting
@@ -1348,117 +1580,212 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// String style
         /// </summary>
-        public Style StringStyle { get; set; }
+        public Style? StringStyle { get; set; }
 
         /// <summary>
         /// Comment style
         /// </summary>
-        public Style CommentStyle { get; set; }
+        public Style? CommentStyle { get; set; }
 
         /// <summary>
         /// Number style
         /// </summary>
-        public Style NumberStyle { get; set; }
+        public Style? NumberStyle { get; set; }
 
         /// <summary>
         /// C# attribute style
         /// </summary>
-        public Style AttributeStyle { get; set; }
+        public Style? AttributeStyle { get; set; }
 
         /// <summary>
         /// Class name style
         /// </summary>
-        public Style ClassNameStyle { get; set; }
+        public Style? ClassNameStyle { get; set; }
 
         /// <summary>
         /// Keyword style
         /// </summary>
-        public Style KeywordStyle { get; set; }
+        public Style? KeywordStyle { get; set; }
 
         /// <summary>
         /// Style of tags in comments of C#
         /// </summary>
-        public Style CommentTagStyle { get; set; }
+        public Style? CommentTagStyle { get; set; }
 
         /// <summary>
         /// HTML attribute value style
         /// </summary>
-        public Style AttributeValueStyle { get; set; }
+        public Style? AttributeValueStyle { get; set; }
 
         /// <summary>
         /// HTML tag brackets style
         /// </summary>
-        public Style TagBracketStyle { get; set; }
+        public Style? TagBracketStyle { get; set; }
 
         /// <summary>
         /// HTML tag name style
         /// </summary>
-        public Style TagNameStyle { get; set; }
+        public Style? TagNameStyle { get; set; }
 
         /// <summary>
         /// HTML Entity style
         /// </summary>
-        public Style HtmlEntityStyle { get; set; }
+        public Style? HtmlEntityStyle { get; set; }
 
         /// <summary>
         /// XML attribute style
         /// </summary>
-        public Style XmlAttributeStyle { get; set; }
+        public Style? XmlAttributeStyle { get; set; }
 
         /// <summary>
         /// XML attribute value style
         /// </summary>
-        public Style XmlAttributeValueStyle { get; set; }
+        public Style? XmlAttributeValueStyle { get; set; }
 
         /// <summary>
         /// XML tag brackets style
         /// </summary>
-        public Style XmlTagBracketStyle { get; set; }
+        public Style? XmlTagBracketStyle { get; set; }
 
         /// <summary>
         /// XML tag name style
         /// </summary>
-        public Style XmlTagNameStyle { get; set; }
+        public Style? XmlTagNameStyle { get; set; }
 
         /// <summary>
         /// XML Entity style
         /// </summary>
-        public Style XmlEntityStyle { get; set; }
+        public Style? XmlEntityStyle { get; set; }
 
         /// <summary>
         /// XML CData style
         /// </summary>
-        public Style XmlCDataStyle { get; set; }
+        public Style? XmlCDataStyle { get; set; }
 
         /// <summary>
         /// Variable style
         /// </summary>
-        public Style VariableStyle { get; set; }
+        public Style? VariableStyle { get; set; }
 
         /// <summary>
         /// Specific PHP keyword style
         /// </summary>
-        public Style KeywordStyle2 { get; set; }
+        public Style? KeywordStyle2 { get; set; }
 
         /// <summary>
         /// Specific PHP keyword style
         /// </summary>
-        public Style KeywordStyle3 { get; set; }
+        public Style? KeywordStyle3 { get; set; }
 
         /// <summary>
         /// SQL Statements style
         /// </summary>
-        public Style StatementsStyle { get; set; }
+        public Style? StatementsStyle { get; set; }
 
         /// <summary>
         /// SQL Functions style
         /// </summary>
-        public Style FunctionsStyle { get; set; }
+        public Style? FunctionsStyle { get; set; }
 
         /// <summary>
         /// SQL Types style
         /// </summary>
-        public Style TypesStyle { get; set; }
+        public Style? TypesStyle { get; set; }
+
+        public Style? BlueBoldStyle => blueBoldStyle;
+
+        public Style? BlueStyle => blueStyle;
+
+        public Style? BoldStyle => boldStyle;
+
+        public Style? BrownStyle => brownStyle;
+
+        public Style? GrayStyle => grayStyle;
+
+        public Style? GreenStyle => greenStyle;
+
+        public Style? MagentaStyle => magentaStyle;
+
+        public Style? MaroonStyle => maroonStyle;
+
+        public Style? RedStyle => redStyle;
+
+        public Style? BlackStyle => blackStyle;
+
+        protected Regex? CSharpAttributeRegex { get => cSharpAttributeRegex; set => cSharpAttributeRegex = value; }
+        public Regex? CSharpClassNameRegex { get => cSharpClassNameRegex; set => cSharpClassNameRegex = value; }
+        protected Regex? CSharpCommentRegex1 { get => cSharpCommentRegex1; set => cSharpCommentRegex1 = value; }
+        protected Regex? CSharpCommentRegex2 { get => cSharpCommentRegex2; set => cSharpCommentRegex2 = value; }
+        protected Regex? CSharpCommentRegex3 { get => cSharpCommentRegex3; set => cSharpCommentRegex3 = value; }
+        protected Regex? CSharpKeywordRegex { get => cSharpKeywordRegex; set => cSharpKeywordRegex = value; }
+        protected Regex? CSharpNumberRegex { get => cSharpNumberRegex; set => cSharpNumberRegex = value; }
+        protected Regex? HTMLAttrRegex { get => hTMLAttrRegex; set => hTMLAttrRegex = value; }
+        protected Regex? HTMLAttrValRegex { get => hTMLAttrValRegex; set => hTMLAttrValRegex = value; }
+        protected Regex? HTMLCommentRegex1 { get => hTMLCommentRegex1; set => hTMLCommentRegex1 = value; }
+        protected Regex? HTMLCommentRegex2 { get => hTMLCommentRegex2; set => hTMLCommentRegex2 = value; }
+        protected Regex? HTMLEntityRegex { get => hTMLEntityRegex; set => hTMLEntityRegex = value; }
+        protected Regex? HTMLTagContentRegex { get => hTMLTagContentRegex; set => hTMLTagContentRegex = value; }
+        protected Regex? XMLAttrRegex { get => xMLAttrRegex; set => xMLAttrRegex = value; }
+        protected Regex? XMLAttrValRegex { get => xMLAttrValRegex; set => xMLAttrValRegex = value; }
+        protected Regex? XMLCommentRegex1 { get => xMLCommentRegex1; set => xMLCommentRegex1 = value; }
+        protected Regex? XMLCommentRegex2 { get => xMLCommentRegex2; set => xMLCommentRegex2 = value; }
+        protected Regex? XMLEndTagRegex { get => xMLEndTagRegex; set => xMLEndTagRegex = value; }
+        protected Regex? XMLEntityRegex { get => xMLEntityRegex; set => xMLEntityRegex = value; }
+        protected Regex? XMLTagContentRegex { get => xMLTagContentRegex; set => xMLTagContentRegex = value; }
+        protected Regex? JScriptCommentRegex1 { get => jScriptCommentRegex1; set => jScriptCommentRegex1 = value; }
+        protected Regex? JScriptCommentRegex2 { get => jScriptCommentRegex2; set => jScriptCommentRegex2 = value; }
+        protected Regex? JScriptCommentRegex3 { get => jScriptCommentRegex3; set => jScriptCommentRegex3 = value; }
+        protected Regex? LuaCommentRegex1 { get => luaCommentRegex1; set => luaCommentRegex1 = value; }
+        protected Regex? LuaCommentRegex2 { get => luaCommentRegex2; set => luaCommentRegex2 = value; }
+        protected Regex? LuaCommentRegex3 { get => luaCommentRegex3; set => luaCommentRegex3 = value; }
+        protected Regex? PHPCommentRegex1 { get => pHPCommentRegex1; set => pHPCommentRegex1 = value; }
+        protected Regex? PHPCommentRegex2 { get => pHPCommentRegex2; set => pHPCommentRegex2 = value; }
+        protected Regex? PHPCommentRegex3 { get => pHPCommentRegex3; set => pHPCommentRegex3 = value; }
+        protected Regex? PHPKeywordRegex1 { get => pHPKeywordRegex1; set => pHPKeywordRegex1 = value; }
+        protected Regex? PHPKeywordRegex2 { get => pHPKeywordRegex2; set => pHPKeywordRegex2 = value; }
+        protected Regex? PHPKeywordRegex3 { get => pHPKeywordRegex3; set => pHPKeywordRegex3 = value; }
+        protected Regex? SQLCommentRegex1 { get => sQLCommentRegex1; set => sQLCommentRegex1 = value; }
+        protected Regex? SQLCommentRegex2 { get => sQLCommentRegex2; set => sQLCommentRegex2 = value; }
+        protected Regex? SQLCommentRegex3 { get => sQLCommentRegex3; set => sQLCommentRegex3 = value; }
+        protected Regex? SQLCommentRegex4 { get => sQLCommentRegex4; set => sQLCommentRegex4 = value; }
+        protected Regex? CSharpStringRegex { get => cSharpStringRegex; set => cSharpStringRegex = value; }
+
+        protected Dictionary<string, SyntaxDescriptor> DescByXMLfileNames => descByXMLfileNames;
+
+        protected List<Style> ResilientStyles => resilientStyles;
+
+        protected Regex? HTMLEndTagRegex { get => hTMLEndTagRegex; set => hTMLEndTagRegex = value; }
+        protected Regex? HTMLTagNameRegex { get => hTMLTagNameRegex; set => hTMLTagNameRegex = value; }
+        protected Regex? HTMLTagRegex { get => hTMLTagRegex; set => hTMLTagRegex = value; }
+        protected Regex? XMLTagNameRegex { get => xMLTagNameRegex; set => xMLTagNameRegex = value; }
+        protected Regex? XMLTagRegex { get => xMLTagRegex; set => xMLTagRegex = value; }
+        protected Regex? XMLCDataRegex { get => xMLCDataRegex; set => xMLCDataRegex = value; }
+        protected Regex? XMLFoldingRegex { get => xMLFoldingRegex; set => xMLFoldingRegex = value; }
+        protected Regex? JScriptKeywordRegex { get => jScriptKeywordRegex; set => jScriptKeywordRegex = value; }
+        protected Regex? JScriptNumberRegex { get => jScriptNumberRegex; set => jScriptNumberRegex = value; }
+        protected Regex? JScriptStringRegex { get => jScriptStringRegex; set => jScriptStringRegex = value; }
+        protected Regex? JSONKeywordRegex { get => jSONKeywordRegex; set => jSONKeywordRegex = value; }
+        protected Regex? JSONNumberRegex { get => jSONNumberRegex; set => jSONNumberRegex = value; }
+        protected Regex? JSONStringRegex { get => jSONStringRegex; set => jSONStringRegex = value; }
+        protected Regex? LuaKeywordRegex { get => luaKeywordRegex; set => luaKeywordRegex = value; }
+        protected Regex? LuaNumberRegex { get => luaNumberRegex; set => luaNumberRegex = value; }
+        protected Regex? LuaStringRegex { get => luaStringRegex; set => luaStringRegex = value; }
+        protected Regex? LuaFunctionsRegex { get => luaFunctionsRegex; set => luaFunctionsRegex = value; }
+        protected Regex? PHPNumberRegex { get => pHPNumberRegex; set => pHPNumberRegex = value; }
+        protected Regex? PHPStringRegex { get => pHPStringRegex; set => pHPStringRegex = value; }
+        protected Regex? PHPVarRegex { get => pHPVarRegex; set => pHPVarRegex = value; }
+        protected Regex? SQLFunctionsRegex { get => sQLFunctionsRegex; set => sQLFunctionsRegex = value; }
+        protected Regex? SQLKeywordsRegex { get => sQLKeywordsRegex; set => sQLKeywordsRegex = value; }
+        protected Regex? SQLNumberRegex { get => sQLNumberRegex; set => sQLNumberRegex = value; }
+        protected Regex? SQLStatementsRegex { get => sQLStatementsRegex; set => sQLStatementsRegex = value; }
+        protected Regex? SQLStringRegex { get => sQLStringRegex; set => sQLStringRegex = value; }
+        protected Regex? SQLTypesRegex { get => sQLTypesRegex; set => sQLTypesRegex = value; }
+        protected Regex? SQLVarRegex { get => sQLVarRegex; set => sQLVarRegex = value; }
+        protected Regex? VBClassNameRegex { get => vBClassNameRegex; set => vBClassNameRegex = value; }
+        protected Regex? VBCommentRegex { get => vBCommentRegex; set => vBCommentRegex = value; }
+        protected Regex? VBKeywordRegex { get => vBKeywordRegex; set => vBKeywordRegex = value; }
+        protected Regex? VBNumberRegex { get => vBNumberRegex; set => vBNumberRegex = value; }
+        protected Regex? VBStringRegex { get => vBStringRegex; set => vBStringRegex = value; }
 
         #endregion
     }

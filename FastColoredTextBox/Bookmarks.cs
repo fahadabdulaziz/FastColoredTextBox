@@ -59,7 +59,7 @@ namespace FastColoredTextBoxNS
             tb.LineRemoved += tb_LineRemoved;
         }
 
-        protected virtual void tb_LineRemoved(object sender, LineRemovedEventArgs e)
+        protected virtual void tb_LineRemoved(object? sender, LineRemovedEventArgs e)
         {
             for(int i=0; i<Count; i++)
             if (items[i].LineIndex >= e.Index)
@@ -93,7 +93,7 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        protected virtual void tb_LineInserted(object sender, LineInsertedEventArgs e)
+        protected virtual void tb_LineInserted(object? sender, LineInsertedEventArgs e)
         {
             for (int i = 0; i < Count; i++)
                 if (items[i].LineIndex >= e.Index)
@@ -238,9 +238,9 @@ namespace FastColoredTextBoxNS
 
         public Bookmark(FastColoredTextBox tb, string name, int lineIndex)
         {
-            this.TB = tb;
-            this.Name = name;
-            this.LineIndex = lineIndex;
+            TB = tb;
+            Name = name;
+            LineIndex = lineIndex;
             Color = tb.BookmarkColor;
         }
 
@@ -249,8 +249,8 @@ namespace FastColoredTextBoxNS
             var size = TB.CharHeight - 1;
             using (var brush = new LinearGradientBrush(new Rectangle(0, lineRect.Top, size, size), Color.White, Color, 45))
                 gr.FillEllipse(brush, 0, lineRect.Top, size, size);
-            using (var pen = new Pen(Color))
-                gr.DrawEllipse(pen, 0, lineRect.Top, size, size);
+            using var pen = new Pen(Color);
+            gr.DrawEllipse(pen, 0, lineRect.Top, size, size);
         }
     }
 }

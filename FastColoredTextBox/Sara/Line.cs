@@ -25,11 +25,11 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Used by consumer to store any form of data that is related to the line.
         /// </summary>
-        public object LineData;
+        private object? lineData;
         /// <summary>
         /// Contains a list of Hidden text
         /// </summary>
-        public List<HideRange> HiddenText { get; set; }
+        public List<HideRange>? HiddenText { get; set; }
         /// <summary>
         /// Total number of hidden characters
         /// </summary>
@@ -37,7 +37,7 @@ namespace FastColoredTextBoxNS
         {
             get
             {
-                return HiddenText.Sum(hideRange => hideRange.End - hideRange.Start);
+                return HiddenText?.Sum(hideRange => hideRange.End - hideRange.Start) ?? 0;
             }
         }
         /// <summary>
@@ -45,12 +45,12 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public bool HideCharacter(int index)
         {
-            return HiddenText.Any(hideRange => index > hideRange.Start - 1 && index < hideRange.End + 1);
+            return HiddenText?.Any(hideRange => index > hideRange.Start - 1 && index < hideRange.End + 1) ?? false;
         }
         /// <summary>
         /// True when the line has documentation.
         /// </summary>
-        public bool IsDocumented;
+        private bool isDocumented;
         /// <summary>
         /// 
         /// </summary>
@@ -63,6 +63,8 @@ namespace FastColoredTextBoxNS
         /// 
         /// </summary>
         public Color PropertyBackColor { get; set; }
+        public object? LineData { get => lineData; set => lineData = value; }
+        public bool IsDocumented { get => isDocumented; set => isDocumented = value; }
 
         internal void SaraLine(int uid)
         {

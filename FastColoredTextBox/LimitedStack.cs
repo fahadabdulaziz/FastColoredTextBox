@@ -7,9 +7,9 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class LimitedStack<T>
     {
-        T[] items;
-        int count;
-        int start;
+        private T?[] items;
+        private int count;
+        private int start;
 
         /// <summary>
         /// Max stack length
@@ -41,21 +41,21 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Pop item
         /// </summary>
-        public T Pop()
+        public T? Pop()
         {
             if (count == 0)
                 throw new Exception("Stack is empty");
 
             int i = LastIndex;
-            T item = items[i];
-            items[i] = default(T);
+            T? item = items[i];
+            items[i] = default;
 
             count--;
 
             return item;
         }
 
-        int LastIndex
+        private int LastIndex
         {
             get { return (start + count - 1) % items.Length; }
         }
@@ -63,10 +63,10 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Peek item
         /// </summary>
-        public T Peek()
+        public T? Peek()
         {
             if (count == 0)
-                return default(T);
+                return default;
 
             return items[LastIndex];
         }
@@ -94,9 +94,9 @@ namespace FastColoredTextBoxNS
             start = 0;
         }
 
-        public T[] ToArray()
+        public T?[] ToArray()
         {
-            T[] result = new T[count];
+            T?[] result = new T[count];
             for (int i = 0; i < count; i++)
                 result[i] = items[(start + i) % items.Length];
             return result;

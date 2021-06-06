@@ -63,7 +63,7 @@ namespace Tester
             }
         }
 
-        void fctb_AutoIndentNeeded(object sender, AutoIndentEventArgs e)
+        private void fctb_AutoIndentNeeded(object sender, AutoIndentEventArgs e)
         {
             // if current line is "begin" then next
             // line shift to right

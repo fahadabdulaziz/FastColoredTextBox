@@ -9,13 +9,13 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class AutocompleteItem
     {
-        public string Text;
-        public int ImageIndex = -1;
-        public object Tag;
-        string toolTipTitle;
-        string toolTipText;
-        string menuText;
-        public AutocompleteMenu Parent { get; internal set; }
+        private string text = string.Empty;
+        private int imageIndex = -1;
+        private object? tag;
+        private string toolTipTitle = string.Empty;
+        private string toolTipText = string.Empty;
+        private string menuText = string.Empty;
+        public AutocompleteMenu? Parent { get; internal set; }
         
 
         public AutocompleteItem()
@@ -30,7 +30,7 @@ namespace FastColoredTextBoxNS
         public AutocompleteItem(string text, int imageIndex)
             : this(text)
         {
-            this.ImageIndex = imageIndex;
+            ImageIndex = imageIndex;
         }
 
         public AutocompleteItem(string text, int imageIndex, string menuText)
@@ -77,7 +77,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// This method is called after item inserted into text
         /// </summary>
-        public virtual void OnSelected(AutocompleteMenu popupMenu, SelectedEventArgs e)
+        public virtual void OnSelected(AutocompleteMenu? popupMenu, SelectedEventArgs e)
         {
             ;
         }
@@ -128,6 +128,10 @@ namespace FastColoredTextBoxNS
             get { return Color.Transparent; }
             set { throw new NotImplementedException("Override this property to change color"); }
         }
+
+        public int ImageIndex { get => imageIndex; set => imageIndex = value; }
+        public object? Tag { get => tag; set => tag = value; }
+        public string Text { get => text; set => text = value; }
     }
 
     public enum CompareResult
@@ -169,10 +173,10 @@ namespace FastColoredTextBoxNS
             return Text;
         }
 
-        public override void OnSelected(AutocompleteMenu popupMenu, SelectedEventArgs e)
+        public override void OnSelected(AutocompleteMenu? popupMenu, SelectedEventArgs e)
         {
-            e.Tb.BeginUpdate();
-            e.Tb.Selection.BeginUpdate();
+            e.Tb?.BeginUpdate();
+            e.Tb?.Selection.BeginUpdate();
             //remember places
             var p1 = popupMenu.Fragment.Start;
             var p2 = e.Tb.Selection.Start;
@@ -216,8 +220,8 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class MethodAutocompleteItem : AutocompleteItem
     {
-        string firstPart;
-        string lowercaseText;
+        private string firstPart = string.Empty;
+        private readonly string lowercaseText;
 
         public MethodAutocompleteItem(string text)
             : base(text)
@@ -230,7 +234,7 @@ namespace FastColoredTextBoxNS
             int i = fragmentText.LastIndexOf('.');
             if (i < 0)
                 return CompareResult.Hidden;
-            string lastPart = fragmentText.Substring(i + 1);
+            string lastPart = fragmentText[(i + 1)..];
             firstPart = fragmentText.Substring(0, i);
 
             if(lastPart=="") return CompareResult.Visible;

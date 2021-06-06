@@ -25,7 +25,7 @@ namespace Tester
         /// <summary>
         /// This method for MyScrollBar
         /// </summary>
-        private void AdjustScrollbar(MyScrollBar scrollBar, int max, int value, int clientSize)
+        private static void AdjustScrollbar(MyScrollBar scrollBar, int max, int value, int clientSize)
         {
             scrollBar.Maximum = max;
             scrollBar.Visible = max > 0;
@@ -35,7 +35,7 @@ namespace Tester
         /// <summary>
         /// This method for System.Windows.Forms.ScrollBar and inherited classes
         /// </summary>
-        private void AdjustScrollbar(ScrollBar scrollBar, int max, int value, int clientSize)
+        private static void AdjustScrollbar(ScrollBar scrollBar, int max, int value, int clientSize)
         {
             scrollBar.LargeChange = clientSize / 3;
             scrollBar.SmallChange = clientSize / 11;
@@ -51,7 +51,7 @@ namespace Tester
 
         private void ScrollBar_Scroll(object sender, ScrollEventArgs e)
         {
-            fctb.OnScroll(e, e.Type != ScrollEventType.ThumbTrack && e.Type != ScrollEventType.ThumbPosition);
+            fctb.OnScroll(e, e.Type is not ScrollEventType.ThumbTrack and not ScrollEventType.ThumbPosition);
         }
     }
 
@@ -150,8 +150,7 @@ namespace Tester
 
         public virtual void OnScroll(ScrollEventType type = ScrollEventType.ThumbPosition)
         {
-            if (Scroll != null)
-                Scroll(this, new ScrollEventArgs(type, Value, Orientation));
+            Scroll?.Invoke(this, new ScrollEventArgs(type, Value, Orientation));
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -173,8 +172,8 @@ namespace Tester
             using(var brush = new SolidBrush(thumbColor))
                 e.Graphics.FillRectangle(brush, thumbRect);
 
-            using (var pen = new Pen(borderColor))
-                e.Graphics.DrawRectangle(pen, new Rectangle(0, 0, Width - 1, Height - 1));
+            using var pen = new Pen(borderColor);
+            e.Graphics.DrawRectangle(pen, new Rectangle(0, 0, Width - 1, Height - 1));
         }
     }
 

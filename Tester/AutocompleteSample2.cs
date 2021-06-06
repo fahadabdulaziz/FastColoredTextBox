@@ -5,16 +5,17 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
     public partial class AutocompleteSample2 : Form
     {
-        AutocompleteMenu popupMenu;
-        string[] keywords = { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "remove", "select", "set", "value", "var", "where", "yield" };
-        string[] methods = { "Equals()", "GetHashCode()", "GetType()", "ToString()"};
-        string[] snippets = { "if(^)\n{\n;\n}", "if(^)\n{\n;\n}\nelse\n{\n;\n}", "for(^;;)\n{\n;\n}", "while(^)\n{\n;\n}", "do${\n^;\n}while();", "switch(^)\n{\ncase : break;\n}"};
-        string[] declarationSnippets = { 
+        private AutocompleteMenu popupMenu;
+        private readonly string[] keywords = { "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while", "add", "alias", "ascending", "descending", "dynamic", "from", "get", "global", "group", "into", "join", "let", "orderby", "partial", "remove", "select", "set", "value", "var", "where", "yield" };
+        private readonly string[] methods = { "Equals()", "GetHashCode()", "GetType()", "ToString()"};
+        private readonly string[] snippets = { "if(^)\n{\n;\n}", "if(^)\n{\n;\n}\nelse\n{\n;\n}", "for(^;;)\n{\n;\n}", "while(^)\n{\n;\n}", "do${\n^;\n}while();", "switch(^)\n{\ncase : break;\n}"};
+        private readonly string[] declarationSnippets = { 
                "public class ^\n{\n}", "private class ^\n{\n}", "internal class ^\n{\n}",
                "public struct ^\n{\n;\n}", "private struct ^\n{\n;\n}", "internal struct ^\n{\n;\n}",
                "public void ^()\n{\n;\n}", "private void ^()\n{\n;\n}", "internal void ^()\n{\n;\n}", "protected void ^()\n{\n;\n}",
@@ -58,7 +59,7 @@ namespace Tester
         /// <summary>
         /// This item appears when any part of snippet text is typed
         /// </summary>
-        class DeclarationSnippet : SnippetAutocompleteItem
+        private class DeclarationSnippet : SnippetAutocompleteItem
         {
             public DeclarationSnippet(string snippet)
                 : base(snippet)
@@ -78,9 +79,9 @@ namespace Tester
         /// Divides numbers and words: "123AND456" -> "123 AND 456"
         /// Or "i=2" -> "i = 2"
         /// </summary>
-        class InsertSpaceSnippet : AutocompleteItem
+        private class InsertSpaceSnippet : AutocompleteItem
         {
-            string pattern;
+            private readonly string pattern;
 
             public InsertSpaceSnippet(string pattern):base("")
             {
@@ -125,9 +126,9 @@ namespace Tester
         /// <summary>
         /// Inerts line break after '}'
         /// </summary>
-        class InsertEnterSnippet : AutocompleteItem
+        private class InsertEnterSnippet : AutocompleteItem
         {
-            Place enterPlace = Place.Empty;
+            private Place enterPlace = Place.Empty;
 
             public InsertEnterSnippet()
                 : base("[Line break]")

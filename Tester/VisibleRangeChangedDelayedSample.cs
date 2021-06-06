@@ -7,15 +7,16 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
     public partial class VisibleRangeChangedDelayedSample : Form
     {
         //styles
-        Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
-        Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
+        private Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        private Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
+        private Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
 
         public VisibleRangeChangedDelayedSample()
         {
@@ -29,7 +30,7 @@ namespace Tester
 <li><a id=""ctl00_TopNavBar_QAAsk"" class=""fly"" href=""/Questions/ask.aspx"">Ask a Question</a></li>";
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < 50000; i++)
-                sb.AppendLine(html4line);
+                _ = sb.AppendLine(html4line);
 
             //assign to FastColoredTextBox
             fctb.Text = sb.ToString();

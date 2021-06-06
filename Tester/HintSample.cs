@@ -28,7 +28,7 @@ namespace Tester
 
         private void fctb_HintClick(object sender, HintClickEventArgs e)
         {
-            MessageBox.Show("You click on the hint");
+            _ = MessageBox.Show("You click on the hint");
         }
     }
 }

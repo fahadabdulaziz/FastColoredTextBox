@@ -7,9 +7,9 @@ namespace FastColoredTextBoxNS
 {
     public partial class ReplaceForm : Form
     {
-        FastColoredTextBox tb;
-        bool firstSearch = true;
-        Place startPlace;
+        private readonly FastColoredTextBox tb;
+        private bool firstSearch = true;
+        private Place startPlace;
 
         public ReplaceForm(FastColoredTextBox tb)
         {
@@ -17,21 +17,21 @@ namespace FastColoredTextBoxNS
             this.tb = tb;
         }
 
-        private void btClose_Click(object sender, EventArgs e)
+        private void btClose_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void btFindNext_Click(object sender, EventArgs e)
+        private void btFindNext_Click(object? sender, EventArgs e)
         {
             try
             {
                 if (!Find(tbFind.Text))
-                    MessageBox.Show("Not found");
+                    _ = MessageBox.Show("Not found");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = MessageBox.Show(ex.Message);
             }
         }
 
@@ -91,7 +91,7 @@ namespace FastColoredTextBoxNS
             return false;
         }
 
-        private void tbFind_KeyPress(object sender, KeyPressEventArgs e)
+        private void tbFind_KeyPress(object? sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '\r')
                 btFindNext_Click(sender, null);
@@ -103,23 +103,23 @@ namespace FastColoredTextBoxNS
         {
             if (keyData == Keys.Escape)
             {
-                this.Close();
+                Close();
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void ReplaceForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void ReplaceForm_FormClosing(object? sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
                 Hide();
             }
-            this.tb.Focus();
+            _ = tb.Focus();
         }
 
-        private void btReplace_Click(object sender, EventArgs e)
+        private void btReplace_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -130,11 +130,11 @@ namespace FastColoredTextBoxNS
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = MessageBox.Show(ex.Message);
             }
         }
 
-        private void btReplaceAll_Click(object sender, EventArgs e)
+        private void btReplaceAll_Click(object? sender, EventArgs e)
         {
             try
             {
@@ -159,27 +159,27 @@ namespace FastColoredTextBoxNS
                 }
                 //
                 tb.Invalidate();
-                MessageBox.Show(ranges.Count + " occurrence(s) replaced");
+                _ = MessageBox.Show(ranges.Count + " occurrence(s) replaced");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = MessageBox.Show(ex.Message);
             }
             tb.Selection.EndUpdate();
         }
 
         protected override void OnActivated(EventArgs e)
         {
-            tbFind.Focus();
+            _ = tbFind.Focus();
             ResetSerach();
         }
 
-        void ResetSerach()
+        private void ResetSerach()
         {
             firstSearch = true;
         }
 
-        private void cbMatchCase_CheckedChanged(object sender, EventArgs e)
+        private void cbMatchCase_CheckedChanged(object? sender, EventArgs e)
         {
             ResetSerach();
         }

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
@@ -22,13 +23,13 @@ namespace Tester
 
         private void miOpen_Click(object sender, EventArgs e)
         {
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (ofd.ShowDialog() == DialogResult.OK)
             {
                 fctb.OpenBindingFile(ofd.FileName, Encoding.UTF8);
                 fctb.IsChanged = false;
                 fctb.ClearUndo();
                 GC.Collect();
-                GC.GetTotalMemory(true);
+                _ = GC.GetTotalMemory(true);
             }
         }
 
@@ -42,7 +43,7 @@ namespace Tester
             HighlightVisibleRange();
         }
 
-        const int margin = 2000;
+        private const int margin = 2000;
 
         private void HighlightVisibleRange()
         {
@@ -82,7 +83,7 @@ namespace Tester
         {
             Random rnd = new Random();
 
-            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (sfd.ShowDialog() == DialogResult.OK)
             using(StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.Default))
             {
                 //create large test file

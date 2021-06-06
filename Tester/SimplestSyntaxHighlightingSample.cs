@@ -8,7 +8,7 @@ namespace Tester
     public partial class SimplestSyntaxHighlightingSample : Form
     {
         //Create style for highlighting
-        TextStyle brownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
+        private TextStyle brownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
 
         public SimplestSyntaxHighlightingSample()
         {

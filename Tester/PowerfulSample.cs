@@ -11,22 +11,23 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
     public partial class PowerfulSample : Form
     {
-        string lang = "CSharp (custom highlighter)";
+        private string lang = "CSharp (custom highlighter)";
 
         //styles
-        TextStyle BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        TextStyle BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
-        TextStyle GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
-        TextStyle MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
-        TextStyle GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
-        TextStyle BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
-        TextStyle MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
-        MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
+        private TextStyle BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        private TextStyle BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
+        private TextStyle GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
+        private TextStyle MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
+        private TextStyle GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
+        private TextStyle BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
+        private TextStyle MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
+        private MarkerStyle SameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(40, Color.Gray)));
 
         public PowerfulSample()
         {
@@ -185,8 +186,10 @@ namespace Tester
 
         private void hTMLToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "HTML with <PRE> tag|*.html|HTML without <PRE> tag|*.html";
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "HTML with <PRE> tag|*.html|HTML without <PRE> tag|*.html"
+            };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 string html = "";
@@ -197,12 +200,14 @@ namespace Tester
                 }
                 if (sfd.FilterIndex == 2)
                 {
-                    
-                    ExportToHTML exporter = new ExportToHTML();
-                    exporter.UseBr = true;
-                    exporter.UseNbsp = false;
-                    exporter.UseForwardNbsp = true;
-                    exporter.UseStyleTag = true;
+
+                    ExportToHTML exporter = new ExportToHTML
+                    {
+                        UseBr = true,
+                        UseNbsp = false,
+                        UseForwardNbsp = true,
+                        UseStyleTag = true
+                    };
                     html = exporter.GetHtml(fctb);
                 }
                 File.WriteAllText(sfd.FileName, html);
@@ -242,9 +247,9 @@ namespace Tester
             fctb.DoAutoIndent();
         }
 
-        const int maxBracketSearchIterations = 2000;
+        private const int maxBracketSearchIterations = 2000;
 
-        void GoLeftBracket(FastColoredTextBox tb, char leftBracket, char rightBracket)
+        private static void GoLeftBracket(FastColoredTextBox tb, char leftBracket, char rightBracket)
         {
             Range range = tb.Selection.Clone();//need to clone because we will move caret
             int counter = 0;
@@ -267,7 +272,7 @@ namespace Tester
             tb.Invalidate();
         }
 
-        void GoRightBracket(FastColoredTextBox tb, char leftBracket, char rightBracket)
+        private static void GoRightBracket(FastColoredTextBox tb, char leftBracket, char rightBracket)
         {
             var range = tb.Selection.Clone();//need clone because we will move caret
             int counter = 0;
@@ -347,7 +352,7 @@ namespace Tester
             fctb.Print(new PrintDialogSettings() { ShowPrintPreviewDialog = true });
         }
 
-        Random rnd = new Random();
+        private readonly Random rnd = new Random();
 
         private void miChangeColors_Click(object sender, EventArgs e)
         {
@@ -386,14 +391,16 @@ namespace Tester
         private void changeHotkeysToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var form = new HotkeysEditorForm(fctb.HotkeysMapping);
-            if(form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if(form.ShowDialog() == DialogResult.OK)
                 fctb.HotkeysMapping = form.GetHotkeys();
         }
 
         private void rTFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "RTF|*.rtf";
+            SaveFileDialog sfd = new SaveFileDialog
+            {
+                Filter = "RTF|*.rtf"
+            };
             if (sfd.ShowDialog() == DialogResult.OK)
             {
                 string rtf = fctb.Rtf;

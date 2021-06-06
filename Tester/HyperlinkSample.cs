@@ -8,7 +8,7 @@ namespace Tester
 {
     public partial class HyperlinkSample : Form
     {
-        TextStyle blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Underline);
+        private TextStyle blueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Underline);
 
         public HyperlinkSample()
         {
@@ -21,7 +21,7 @@ namespace Tester
             e.ChangedRange.SetStyle(blueStyle, @"(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?");
         }
 
-        bool CharIsHyperlink(Place place)
+        private bool CharIsHyperlink(Place place)
         {
             var mask = fctb.GetStyleIndexMask(new Style[] { blueStyle });
             if (place.iChar < fctb.GetLineLength(place.iLine))

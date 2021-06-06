@@ -12,8 +12,8 @@ namespace FastColoredTextBoxNS
     {
         protected List<Char> chars;
 
-        public string FoldingStartMarker { get; set; }
-        public string FoldingEndMarker { get; set; }
+        public string? FoldingStartMarker { get; set; }
+        public string? FoldingEndMarker { get; set; }
         /// <summary>
         /// Text of line was changed
         /// </summary>
@@ -26,7 +26,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Background brush.
         /// </summary>
-        public Brush BackgroundBrush { get; set;}
+        public Brush? BackgroundBrush { get; set;}
         /// <summary>
         /// Unique ID
         /// </summary>
@@ -42,7 +42,7 @@ namespace FastColoredTextBoxNS
 
         internal Line(int uid)
         {
-            this.UniqueId = uid;
+            UniqueId = uid;
             chars = new List<Char>();
             SaraLine(uid);
         }
@@ -71,7 +71,7 @@ namespace FastColoredTextBoxNS
             get{
                 StringBuilder sb = new StringBuilder(Count);
                 foreach(Char c in this)
-                    sb.Append(c.c);
+                    _ = sb.Append(c.c);
                 return sb.ToString();
             }
         }
@@ -174,7 +174,7 @@ namespace FastColoredTextBoxNS
 
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            return chars.GetEnumerator() as System.Collections.IEnumerator;
+            return chars.GetEnumerator();
         }
 
         public virtual void RemoveRange(int index, int count)
@@ -197,21 +197,21 @@ namespace FastColoredTextBoxNS
 
     public struct LineInfo
     {
-        List<int> cutOffPositions;
+        private List<int>? cutOffPositions;
         //Y coordinate of line on screen
-        internal int startY;
-        internal int bottomPadding;
+        private int startY;
+        private int bottomPadding;
         //indent of secondary wordwrap strings (in chars)
-        internal int wordWrapIndent;
+        private int wordWrapIndent;
         /// <summary>
         /// Visible state
         /// </summary>
-        public VisibleState VisibleState;
+        private VisibleState visibleState;
 
         public LineInfo(int startY)
         {
             cutOffPositions = null;
-            VisibleState = VisibleState.Visible;
+            visibleState = VisibleState.Visible;
             this.startY = startY;
             bottomPadding = 0;
             wordWrapIndent = 0;
@@ -250,6 +250,11 @@ namespace FastColoredTextBoxNS
                 return 0;
             }
         }
+
+        internal int StartY { get => startY; set => startY = value; }
+        internal int BottomPadding { get => bottomPadding; set => bottomPadding = value; }
+        internal int WordWrapIndent { get => wordWrapIndent; set => wordWrapIndent = value; }
+        public VisibleState VisibleState { get => visibleState; set => visibleState = value; }
 
         internal int GetWordWrapStringStartPosition(int iWordWrapLine)
         {

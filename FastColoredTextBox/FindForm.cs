@@ -7,9 +7,9 @@ namespace FastColoredTextBoxNS
 {
     public partial class FindForm : Form
     {
-        bool firstSearch = true;
-        Place startPlace;
-        FastColoredTextBox tb;
+        private bool firstSearch = true;
+        private Place startPlace;
+        private readonly FastColoredTextBox tb;
 
         public FindForm(FastColoredTextBox tb)
         {
@@ -17,12 +17,12 @@ namespace FastColoredTextBoxNS
             this.tb = tb;
         }
 
-        private void btClose_Click(object sender, EventArgs e)
+        private void btClose_Click(object? sender, EventArgs e)
         {
             Close();
         }
 
-        private void btFindNext_Click(object sender, EventArgs e)
+        private void btFindNext_Click(object? sender, EventArgs e)
         {
             FindNext(tbFind.Text);
         }
@@ -66,15 +66,15 @@ namespace FastColoredTextBoxNS
                     FindNext(pattern);
                     return;
                 }
-                MessageBox.Show("Not found");
+                _ = MessageBox.Show("Not found");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
+                _ = MessageBox.Show(ex.Message);
             }
         }
 
-        private void tbFind_KeyPress(object sender, KeyPressEventArgs e)
+        private void tbFind_KeyPress(object? sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == '\r')
             {
@@ -90,21 +90,21 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        private void FindForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void FindForm_FormClosing(object? sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
                 Hide();
             }
-            this.tb.Focus();
+            _ = tb.Focus();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             if (keyData == Keys.Escape)
             {
-                this.Close();
+                Close();
                 return true;
             }
             return base.ProcessCmdKey(ref msg, keyData);
@@ -112,16 +112,16 @@ namespace FastColoredTextBoxNS
 
         protected override void OnActivated(EventArgs e)
         {
-            tbFind.Focus();
+            _ = tbFind.Focus();
             ResetSerach();
         }
 
-        void ResetSerach()
+        private void ResetSerach()
         {
             firstSearch = true;
         }
 
-        private void cbMatchCase_CheckedChanged(object sender, EventArgs e)
+        private void cbMatchCase_CheckedChanged(object? sender, EventArgs e)
         {
             ResetSerach();
         }

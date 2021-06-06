@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Text;
 
 namespace FastColoredTextBoxNS
 {
@@ -11,64 +11,68 @@ namespace FastColoredTextBoxNS
     /// This class contains the source text (chars and styles).
     /// It stores a text lines, the manager of commands, undo/redo stack, styles.
     /// </summary>
-    public class TextSource: IList<Line>, IDisposable
+    public class TextSource : IList<Line?>, IDisposable
     {
-        readonly protected List<Line> lines = new List<Line>();
+        readonly protected List<Line?> lines = new List<Line?>();
         protected LinesAccessor linesAccessor;
-        int lastLineUniqueId;
+        private int lastLineUniqueId;
         public CommandManager Manager { get; set; }
-        FastColoredTextBox currentTB;
+
+        private FastColoredTextBox currentTB;
         /// <summary>
         /// Styles
         /// </summary>
-        public readonly Style[] Styles;
+        private readonly Style[] styles;
         /// <summary>
         /// Occurs when line was inserted/added
         /// </summary>
-        public event EventHandler<LineInsertedEventArgs> LineInserted;
+        public event EventHandler<LineInsertedEventArgs>? LineInserted;
         /// <summary>
         /// Occurs when line was removed
         /// </summary>
-        public event EventHandler<LineRemovedEventArgs> LineRemoved;
+        public event EventHandler<LineRemovedEventArgs>? LineRemoved;
         /// <summary>
         /// Occurs when text was changed
         /// </summary>
-        public event EventHandler<TextChangedEventArgs> TextChanged;
+        public event EventHandler<TextChangedEventArgs>? TextChanged;
         /// <summary>
         /// Occurs when recalc is needed
         /// </summary>
-        public event EventHandler<TextChangedEventArgs> RecalcNeeded;
+        public event EventHandler<TextChangedEventArgs>? RecalcNeeded;
         /// <summary>
         /// Occurs when recalc wordwrap is needed
         /// </summary>
-        public event EventHandler<TextChangedEventArgs> RecalcWordWrap;
+        public event EventHandler<TextChangedEventArgs>? RecalcWordWrap;
         /// <summary>
         /// Occurs before text changing
         /// </summary>
-        public event EventHandler<TextChangingEventArgs> TextChanging;
+        public event EventHandler<TextChangingEventArgs>? TextChanging;
         /// <summary>
         /// Occurs after CurrentTB was changed
         /// </summary>
-        public event EventHandler CurrentTBChanged;
+        public event EventHandler? CurrentTBChanged;
         /// <summary>
         /// Current focused FastColoredTextBox
         /// </summary>
-        public FastColoredTextBox CurrentTB {
+        public FastColoredTextBox CurrentTB
+        {
             get { return currentTB; }
-            set {
+            set
+            {
                 if (currentTB == value)
                     return;
                 currentTB = value;
-                OnCurrentTBChanged(); 
+                OnCurrentTBChanged();
             }
         }
 
         public virtual void ClearIsChanged()
         {
-            foreach(var line in lines)
-                line.IsChanged = false;
+            foreach (var line in lines)
+                if (line != null)
+                    line.IsChanged = false;
         }
-        
+
         public virtual Line CreateLine()
         {
             return new Line(GenerateUniqueLineId());
@@ -76,26 +80,25 @@ namespace FastColoredTextBoxNS
 
         private void OnCurrentTBChanged()
         {
-            if (CurrentTBChanged != null)
-                CurrentTBChanged(this, EventArgs.Empty);
+            CurrentTBChanged?.Invoke(this, EventArgs.Empty);
         }
 
         /// <summary>
         /// Default text style
         /// This style is using when no one other TextStyle is not defined in Char.style
         /// </summary>
-        public TextStyle DefaultStyle { get; set; }
+        public TextStyle? DefaultStyle { get; set; }
 
         public TextSource(FastColoredTextBox currentTB)
         {
-            this.CurrentTB = currentTB;
+            this.currentTB = currentTB;
             linesAccessor = new LinesAccessor(this);
             Manager = new CommandManager(this);
 
-            if (Enum.GetUnderlyingType(typeof(StyleIndex)) == typeof(UInt32))
-                Styles = new Style[32];
+            if (Enum.GetUnderlyingType(typeof(StyleIndex)) == typeof(uint))
+                styles = new Style[32];
             else
-                Styles = new Style[16];
+                styles = new Style[16];
 
             InitDefaultStyle();
         }
@@ -105,12 +108,14 @@ namespace FastColoredTextBoxNS
             DefaultStyle = new TextStyle(null, null, FontStyle.Regular);
         }
 
-        public virtual Line this[int i]
+        public virtual Line? this[int i]
         {
-            get{
-                 return lines[i];
+            get
+            {
+                return lines[i];
             }
-            set {
+            set
+            {
                 throw new NotImplementedException();
             }
         }
@@ -133,12 +138,12 @@ namespace FastColoredTextBoxNS
             return lines.GetEnumerator();
         }
 
-        IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            return (lines  as IEnumerator);
+            return (IEnumerator)lines;
         }
 
-        public virtual int BinarySearch(Line item, IComparer<Line> comparer)
+        public virtual int BinarySearch(Line item, IComparer<Line?> comparer)
         {
             return lines.BinarySearch(item, comparer);
         }
@@ -161,8 +166,7 @@ namespace FastColoredTextBoxNS
 
         public virtual void OnLineInserted(int index, int count)
         {
-            if (LineInserted != null)
-                LineInserted(this, new LineInsertedEventArgs(index, count));
+            LineInserted?.Invoke(this, new LineInsertedEventArgs(index, count));
         }
 
         public virtual void RemoveLine(int index)
@@ -192,14 +196,12 @@ namespace FastColoredTextBoxNS
         public virtual void OnLineRemoved(int index, int count, List<int> removedLineIds)
         {
             if (count > 0)
-                if (LineRemoved != null)
-                    LineRemoved(this, new LineRemovedEventArgs(index, count, removedLineIds));
+                LineRemoved?.Invoke(this, new LineRemovedEventArgs(index, count, removedLineIds));
         }
 
         public virtual void OnTextChanged(int fromLine, int toLine)
         {
-            if (TextChanged != null)
-                TextChanged(this, new TextChangedEventArgs(Math.Min(fromLine, toLine), Math.Max(fromLine, toLine) ));
+            TextChanged?.Invoke(this, new TextChangedEventArgs(Math.Min(fromLine, toLine), Math.Max(fromLine, toLine)));
         }
 
         public class TextChangedEventArgs : EventArgs
@@ -214,12 +216,12 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        public virtual int IndexOf(Line item)
+        public virtual int IndexOf(Line? item)
         {
             return lines.IndexOf(item);
         }
 
-        public virtual void Insert(int index, Line item)
+        public virtual void Insert(int index, Line? item)
         {
             InsertLine(index, item);
         }
@@ -229,7 +231,7 @@ namespace FastColoredTextBoxNS
             RemoveLine(index);
         }
 
-        public virtual void Add(Line item)
+        public virtual void Add(Line? item)
         {
             InsertLine(Count, item);
         }
@@ -239,12 +241,12 @@ namespace FastColoredTextBoxNS
             RemoveLine(0, Count);
         }
 
-        public virtual bool Contains(Line item)
+        public virtual bool Contains(Line? item)
         {
             return lines.Contains(item);
         }
 
-        public virtual void CopyTo(Line[] array, int arrayIndex)
+        public virtual void CopyTo(Line?[] array, int arrayIndex)
         {
             lines.CopyTo(array, arrayIndex);
         }
@@ -262,7 +264,9 @@ namespace FastColoredTextBoxNS
             get { return false; }
         }
 
-        public virtual bool Remove(Line item)
+        public Style[] Styles => styles;
+
+        public virtual bool Remove(Line? item)
         {
             int i = IndexOf(item);
             if (i >= 0)
@@ -276,19 +280,17 @@ namespace FastColoredTextBoxNS
 
         public virtual void NeedRecalc(TextChangedEventArgs args)
         {
-            if (RecalcNeeded != null)
-                RecalcNeeded(this, args);
+            RecalcNeeded?.Invoke(this, args);
         }
 
         public virtual void OnRecalcWordWrap(TextChangedEventArgs args)
         {
-            if (RecalcWordWrap != null)
-                RecalcWordWrap(this, args);
+            RecalcWordWrap?.Invoke(this, args);
         }
 
         public virtual void OnTextChanging()
         {
-            string temp = null;
+            string temp = string.Empty;
             OnTextChanging(ref temp);
         }
 
@@ -322,17 +324,16 @@ namespace FastColoredTextBoxNS
         public virtual void Dispose()
         {
             ;
+            GC.SuppressFinalize(this);
         }
 
         public virtual void SaveToFile(string fileName, Encoding enc)
         {
-            using (StreamWriter sw = new StreamWriter(fileName, false, enc))
-            {
-                for (int i = 0; i < Count - 1;i++ )
-                    sw.WriteLine(lines[i].Text);
+            using StreamWriter sw = new StreamWriter(fileName, false, enc);
+            for (int i = 0; i < Count - 1; i++)
+                sw.WriteLine(lines[i].Text);
 
-                sw.Write(lines[Count-1].Text);
-            }
+            sw.Write(lines[Count - 1].Text);
         }
     }
 }

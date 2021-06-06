@@ -8,7 +8,7 @@ namespace Tester
     public partial class CustomStyleSample : Form
     {
         //create my custom style
-        EllipseStyle ellipseStyle = new EllipseStyle();
+        private readonly EllipseStyle ellipseStyle = new EllipseStyle();
 
         public CustomStyleSample()
         {
@@ -27,7 +27,7 @@ namespace Tester
     /// <summary>
     /// This style will drawing ellipse around of the word
     /// </summary>
-    class EllipseStyle : Style
+    internal class EllipseStyle : Style
     {
         public override void Draw(Graphics gr, Point position, Range range)
         {

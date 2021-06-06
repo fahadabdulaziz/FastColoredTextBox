@@ -11,9 +11,8 @@ namespace Tester
 {
     public partial class AutocompleteSample4 : Form
     {
-        AutocompleteMenu popupMenu;
-
-        static readonly string[] sources = new string[]{
+        private AutocompleteMenu popupMenu;
+        private static readonly string[] sources = new string[]{
             "com",
             "com.company",
             "com.company.Class1",
@@ -33,8 +32,10 @@ namespace Tester
             InitializeComponent();
 
             //create autocomplete popup menu
-            popupMenu = new AutocompleteMenu(fctb);
-            popupMenu.SearchPattern = @"[\w\.]";
+            popupMenu = new AutocompleteMenu(fctb)
+            {
+                SearchPattern = @"[\w\.]"
+            };
 
             //
             var items = new List<AutocompleteItem>();
@@ -50,8 +51,8 @@ namespace Tester
     /// </summary>
     public class MethodAutocompleteItem2 : MethodAutocompleteItem
     {
-        string firstPart;
-        string lastPart;
+        private readonly string firstPart;
+        private readonly string lastPart;
 
         public MethodAutocompleteItem2(string text)
             : base(text)
@@ -62,7 +63,7 @@ namespace Tester
             else
             {
                 firstPart = text.Substring(0, i);
-                lastPart = text.Substring(i + 1);
+                lastPart = text[(i + 1)..];
             }
         }
 
@@ -80,7 +81,7 @@ namespace Tester
             else
             {
                 var fragmentFirstPart = fragmentText.Substring(0, i);
-                var fragmentLastPart = fragmentText.Substring(i + 1);
+                var fragmentLastPart = fragmentText[(i + 1)..];
 
 
                 if (firstPart != fragmentFirstPart)

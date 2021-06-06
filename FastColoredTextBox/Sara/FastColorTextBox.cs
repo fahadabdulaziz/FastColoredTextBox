@@ -28,7 +28,7 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        private void DrawHighlight(Line line, Graphics gr, int x, int y, int width, int height)
+        private static void DrawHighlight(Line line, Graphics gr, int x, int y, int width, int height)
         {
             if (line.PropertyBackColor != Color.Transparent)
                 gr.FillRectangle(new SolidBrush(line.PropertyBackColor), new Rectangle(x, y, width, height));
@@ -49,7 +49,7 @@ namespace FastColoredTextBoxNS
         [Browsable(true)]
         [Description(
             "It occurs when line background is painting.  Provides the option to change the background color of the line.")]
-        public event PaintLineFullAccessEventHandler PaintLineFullAccess;
+        public event PaintLineFullAccessEventHandler? PaintLineFullAccess;
 
         /// <summary>
         /// Clears the LineData object within the Lines - Sara
@@ -65,7 +65,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Added path for debugging purposes - Travis
         /// </summary>
-        public string DocumentPath { get; set; }
+        public string? DocumentPath { get; set; }
         /// <summary>
         /// Exposes the Line object to the consumer - Sara
         /// </summary>

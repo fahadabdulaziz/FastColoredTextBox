@@ -56,12 +56,12 @@ namespace FastColoredTextBoxNS
             {
                 if (item is Keys)
                 {
-                    UnderlayingControl.ProcessKey((Keys)item);
+                    _ = UnderlayingControl.ProcessKey((Keys)item);
                 }
                 if (item is KeyValuePair<char, Keys>)
                 {
                     var p = (KeyValuePair<char, Keys>)item;
-                    UnderlayingControl.ProcessKey(p.Key, p.Value);
+                    _ = UnderlayingControl.ProcessKey(p.Key, p.Value);
                 }
                 
             }
@@ -124,20 +124,20 @@ namespace FastColoredTextBoxNS
                 var kc = new KeysConverter();
 
                 StringBuilder sb = new StringBuilder();
-                sb.AppendLine("<macros>");
+                _ = sb.AppendLine("<macros>");
                 foreach (var item in macro)
                 {
                     if (item is Keys)
                     {
-                        sb.AppendFormat("<item key='{0}' />\r\n", kc.ConvertToString((Keys)item));
+                        _ = sb.AppendFormat("<item key='{0}' />\r\n", kc.ConvertToString((Keys)item));
                     }
                     else if (item is KeyValuePair<char, Keys>)
                     {
                         var p = (KeyValuePair<char, Keys>)item;
-                        sb.AppendFormat("<item char='{0}' key='{1}' />\r\n", (int)p.Key, kc.ConvertToString(p.Value));
+                        _ = sb.AppendFormat("<item char='{0}' key='{1}' />\r\n", (int)p.Key, kc.ConvertToString(p.Value));
                     }
                 }
-                sb.AppendLine("</macros>");
+                _ = sb.AppendLine("</macros>");
 
                 Thread.CurrentThread.CurrentUICulture = cult;
 

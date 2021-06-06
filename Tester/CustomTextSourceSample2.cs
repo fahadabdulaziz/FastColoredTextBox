@@ -14,17 +14,17 @@ namespace Tester
             InitializeComponent();
         }
 
-        private string CreateBigString()
+        private static string CreateBigString()
         {
             var sb = new StringBuilder();
             var counter = 1;
 
             for (int i = 0; i < 25000; i++)
             {
-                sb.AppendLine(counter++ + " aaaaccccc");
-                sb.AppendLine(counter++ + " bbbbbbcc");
-                sb.AppendLine(counter++ + " cccaaaa");
-                sb.AppendLine(counter++ + " dddddaaaa");
+                _ = sb.AppendLine(counter++ + " aaaaccccc");
+                _ = sb.AppendLine(counter++ + " bbbbbbcc");
+                _ = sb.AppendLine(counter++ + " cccaaaa");
+                _ = sb.AppendLine(counter++ + " dddddaaaa");
             }
 
             return sb.ToString();
@@ -49,7 +49,7 @@ namespace Tester
 
     public class TextSourceWithLineFiltering : TextSource
     {
-        List<int> toSourceIndex = new List<int>();
+        private readonly List<int> toSourceIndex = new List<int>();
         private string _lineFilterRegex;
 
         public string LineFilterRegex

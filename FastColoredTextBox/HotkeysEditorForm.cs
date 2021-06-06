@@ -10,7 +10,7 @@ namespace FastColoredTextBoxNS
 {
     public partial class HotkeysEditorForm : Form
     {
-        BindingList<HotkeyWrapper> wrappers = new BindingList<HotkeyWrapper>();
+        private readonly BindingList<HotkeyWrapper> wrappers = new BindingList<HotkeyWrapper>();
 
         public HotkeysEditorForm(HotkeysMapping hotkeys)
         {
@@ -19,7 +19,7 @@ namespace FastColoredTextBoxNS
             dgv.DataSource = wrappers;
         }
 
-        int CompereKeys(Keys key1, Keys key2)
+        private int CompereKeys(Keys key1, Keys key2)
         {
             var res = ((int)key1 & 0xff).CompareTo((int)key2 & 0xff);
             if (res == 0)
@@ -51,50 +51,50 @@ namespace FastColoredTextBoxNS
             return result;
         }
 
-        private void btAdd_Click(object sender, EventArgs e)
+        private void btAdd_Click(object? sender, EventArgs e)
         {
             wrappers.Add(new HotkeyWrapper(Keys.None, FCTBAction.None));
         }
 
-        private void dgv_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
+        private void dgv_RowsAdded(object? sender, DataGridViewRowsAddedEventArgs e)
         {
-            var cell = (dgv[0, e.RowIndex] as DataGridViewComboBoxCell);
+            var cell = dgv[0, e.RowIndex] as DataGridViewComboBoxCell;
             if(cell.Items.Count == 0)
             foreach(var item in new string[]{"", "Ctrl", "Ctrl + Shift", "Ctrl + Alt", "Shift", "Shift + Alt", "Alt", "Ctrl + Shift + Alt"})
-                cell.Items.Add(item);
+                    _ = cell.Items.Add(item);
 
-            cell = (dgv[1, e.RowIndex] as DataGridViewComboBoxCell);
+            cell = dgv[1, e.RowIndex] as DataGridViewComboBoxCell;
             if (cell.Items.Count == 0)
             foreach (var item in Enum.GetValues(typeof(Keys)))
-                cell.Items.Add(item);
+                    _ = cell.Items.Add(item);
 
-            cell = (dgv[2, e.RowIndex] as DataGridViewComboBoxCell);
+            cell = dgv[2, e.RowIndex] as DataGridViewComboBoxCell;
             if (cell.Items.Count == 0)
             foreach (var item in Enum.GetValues(typeof(FCTBAction)))
-                cell.Items.Add(item);
+                    _ = cell.Items.Add(item);
         }
 
-        private void btResore_Click(object sender, EventArgs e)
+        private void btResore_Click(object? sender, EventArgs e)
         {
             HotkeysMapping h = new HotkeysMapping();
             h.InitDefault();
             BuildWrappers(h);
         }
 
-        private void btRemove_Click(object sender, EventArgs e)
+        private void btRemove_Click(object? sender, EventArgs e)
         {
             for (int i = dgv.RowCount - 1; i >= 0; i--)
                 if (dgv.Rows[i].Selected) dgv.Rows.RemoveAt(i);
         }
 
-        private void HotkeysEditorForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void HotkeysEditorForm_FormClosing(object? sender, FormClosingEventArgs e)
         {
-            if(DialogResult == System.Windows.Forms.DialogResult.OK)
+            if(DialogResult == DialogResult.OK)
             {
                 var actions = GetUnAssignedActions();
                 if (!string.IsNullOrEmpty(actions))
                 {
-                    if (MessageBox.Show("Some actions are not assigned!\r\nActions: " + actions + "\r\nPress Yes to save and exit, press No to continue editing", "Some actions is not assigned", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == System.Windows.Forms.DialogResult.No)
+                    if (MessageBox.Show("Some actions are not assigned!\r\nActions: " + actions + "\r\nPress Yes to save and exit, press No to continue editing", "Some actions is not assigned", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                         e.Cancel = true;
                 }
             }
@@ -113,7 +113,7 @@ namespace FastColoredTextBoxNS
             if(!((FCTBAction)item).ToString().StartsWith("CustomAction"))
             {
                 if(!dic.ContainsKey((FCTBAction)item))
-                    sb.Append(item+", ");
+                            _ = sb.Append(item + ", ");
             }
 
             return sb.ToString().TrimEnd(' ', ',');
@@ -143,9 +143,9 @@ namespace FastColoredTextBoxNS
             return res;
         }
 
-        bool Ctrl;
-        bool Shift;
-        bool Alt;
+        private bool Ctrl;
+        private bool Shift;
+        private bool Alt;
         
         public string Modifiers
         {

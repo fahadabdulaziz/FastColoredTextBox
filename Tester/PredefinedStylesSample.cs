@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
@@ -30,7 +31,8 @@ namespace Tester
                     case 0: fctb.AppendText("This is simple text "); break;
                     case 1: fctb.AppendText("Some link", new BlockDesc() { URL = "http://google.com?q=" + i }); break;
                     case 2: fctb.AppendText("TooltipedText ", new BlockDesc() { IsBold = true, ToolTip = "ToolTip " + i }); break;
-                    case 3: fctb.NewLine(); break;
+                    case 3:
+                        fctb.NewLine(); break;
                 }
             }
 
@@ -41,14 +43,13 @@ namespace Tester
 
     internal class ReadOnlyFCTB : FastColoredTextBox
     {
-        TextStyle linkStyle = new TextStyle(Brushes.Blue, null, FontStyle.Underline);
-        TextStyle visitedLinkStyle = new TextStyle(Brushes.Brown, null, FontStyle.Underline);
-        TextStyle boldStyle = new TextStyle(Brushes.Navy, null, FontStyle.Bold);
-        List<BlockDesc> blockDescs = new List<BlockDesc>();
-
-        Point lastMouseCoord;
-        Place lastPlace;
-        readonly Place emptyPlace = new Place(-1, -1);
+        private TextStyle linkStyle = new TextStyle(Brushes.Blue, null, FontStyle.Underline);
+        private TextStyle visitedLinkStyle = new TextStyle(Brushes.Brown, null, FontStyle.Underline);
+        private TextStyle boldStyle = new TextStyle(Brushes.Navy, null, FontStyle.Bold);
+        private readonly List<BlockDesc> blockDescs = new List<BlockDesc>();
+        private Point lastMouseCoord;
+        private Place lastPlace;
+        private readonly Place emptyPlace = new Place(-1, -1);
 
         public ReadOnlyFCTB()
         {
@@ -82,7 +83,7 @@ namespace Tester
             }
         }
 
-        BlockDesc GetDesc(Place place)
+        private BlockDesc GetDesc(Place place)
         {
             var index = blockDescs.BinarySearch(new BlockDesc() { Start = place, End = place });
             if (index >= 0)

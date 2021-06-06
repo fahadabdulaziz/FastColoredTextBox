@@ -7,13 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
     public partial class DynamicSyntaxHighlighting : Form
     {
-        Style KeywordsStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
-        Style FunctionNameStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        private Style KeywordsStyle = new TextStyle(Brushes.Green, null, FontStyle.Regular);
+        private Style FunctionNameStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
 
         public DynamicSyntaxHighlighting()
         {

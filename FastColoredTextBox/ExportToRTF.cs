@@ -20,8 +20,8 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public bool UseOriginalFont { get; set; }
 
-        FastColoredTextBox tb;
-        Dictionary<Color, int> colorTable = new Dictionary<Color, int>();
+        private FastColoredTextBox? tb;
+        private readonly Dictionary<Color, int> colorTable = new Dictionary<Color, int>();
 
         public ExportToRTF()
         {
@@ -38,8 +38,8 @@ namespace FastColoredTextBoxNS
 
         public string GetRtf(Range r)
         {
-            this.tb = r.tb;
-            var styles = new Dictionary<StyleIndex, object>();
+            tb = r.Tb;
+            var styles = new Dictionary<StyleIndex, object?>();
             var sb = new StringBuilder();
             var tempSB = new StringBuilder();
             var currentStyleId = StyleIndex.None;
@@ -48,14 +48,14 @@ namespace FastColoredTextBoxNS
             styles[currentStyleId] = null;
             colorTable.Clear();
             //
-            var lineNumberColor = GetColorTableNumber(r.tb.LineNumberColor);
+            var lineNumberColor = GetColorTableNumber(r.Tb.LineNumberColor);
 
             if (IncludeLineNumbers)
-                tempSB.AppendFormat(@"{{\cf{1} {0}}}\tab", currentLine + 1, lineNumberColor);
+                _ = tempSB.AppendFormat(@"{{\cf{1} {0}}}\tab", currentLine + 1, lineNumberColor);
             //
             foreach (Place p in r)
             {
-                Char c = r.tb[p.iLine][p.iChar];
+                Char c = r.Tb[p.iLine][p.iChar];
                 if (c.style != currentStyleId)
                 {
                     Flush(sb, tempSB, currentStyleId);
@@ -67,30 +67,30 @@ namespace FastColoredTextBoxNS
                 {
                     for (int i = currentLine; i < p.iLine; i++)
                     {
-                        tempSB.AppendLine(@"\line");
+                        _ = tempSB.AppendLine(@"\line");
                         if (IncludeLineNumbers)
-                            tempSB.AppendFormat(@"{{\cf{1} {0}}}\tab", i + 2, lineNumberColor);
+                            _ = tempSB.AppendFormat(@"{{\cf{1} {0}}}\tab", i + 2, lineNumberColor);
                     }
                     currentLine = p.iLine;
                 }
                 switch (c.c)
                 {
                     case '\\':
-                        tempSB.Append(@"\\");
+                        _ = tempSB.Append(@"\\");
                         break;
                     case '{':
-                        tempSB.Append(@"\{");
+                        _ = tempSB.Append(@"\{");
                         break;
                     case '}':
-                        tempSB.Append(@"\}");
+                        _ = tempSB.Append(@"\}");
                         break;
                     default:
                         var ch = c.c;
                         var code = (int)ch;
                         if(code < 128)
-                            tempSB.Append(c.c);
+                            _ = tempSB.Append(c.c);
                         else
-                            tempSB.AppendFormat(@"{{\u{0}}}", code);
+                            _ = tempSB.AppendFormat(@"{{\u{0}}}", code);
                         break;
                 }
             }
@@ -102,24 +102,23 @@ namespace FastColoredTextBoxNS
                 list.Add(pair.Value, pair.Key);
 
             tempSB.Length = 0;
-            tempSB.AppendFormat(@"{{\colortbl;");
+            _ = tempSB.AppendFormat(@"{{\colortbl;");
 
             foreach (var pair in list)
-                tempSB.Append(GetColorAsString(pair.Value)+";");
-            tempSB.AppendLine("}");
+                _ = tempSB.Append(GetColorAsString(pair.Value) + ";");
+            _ = tempSB.AppendLine("}");
 
             //
             if (UseOriginalFont)
             {
-                sb.Insert(0, string.Format(@"{{\fonttbl{{\f0\fmodern {0};}}}}{{\fs{1} ",
-                                tb.Font.Name, (int)(2 * tb.Font.SizeInPoints), tb.CharHeight));
-                sb.AppendLine(@"}");
+                _ = sb.Insert(0, $@"{{\fonttbl{{\f0\fmodern {tb.Font.Name};}}}}{{\fs{(int)(2 * tb.Font.SizeInPoints)} ");
+                _ = sb.AppendLine(@"}");
             }
 
-            sb.Insert(0, tempSB.ToString());
+            _ = sb.Insert(0, tempSB.ToString());
 
-            sb.Insert(0, @"{\rtf1\ud\deff0");
-            sb.AppendLine(@"}");
+            _ = sb.Insert(0, @"{\rtf1\ud\deff0");
+            _ = sb.AppendLine(@"}");
 
             return sb.ToString();
         }
@@ -128,7 +127,7 @@ namespace FastColoredTextBoxNS
         {
             List<Style> styles = new List<Style>();
             //find text renderer
-            TextStyle textStyle = null;
+            TextStyle? textStyle = null;
             int mask = 1;
             bool hasTextStyle = false;
             for (int i = 0; i < tb.Styles.Length; i++)
@@ -147,22 +146,10 @@ namespace FastColoredTextBoxNS
                                 textStyle = style as TextStyle;
                             }
                     }
-                mask = mask << 1;
+                mask <<= 1;
             }
             //add TextStyle css
-            RTFStyleDescriptor result = null;
-
-            if (!hasTextStyle)
-            {
-                //draw by default renderer
-                result = tb.DefaultStyle.GetRTF();
-            }
-            else
-            {
-                result = textStyle.GetRTF();
-            }
-
-            return result;
+            return !hasTextStyle ? tb.DefaultStyle.GetRTF() : textStyle.GetRTF();
         }
 
         public static string GetColorAsString(Color color)
@@ -183,16 +170,16 @@ namespace FastColoredTextBoxNS
             var cb = GetColorTableNumber(desc.BackColor);
             var tags = new StringBuilder();
             if (cf >= 0)
-                tags.AppendFormat(@"\cf{0}", cf);
+                _ = tags.AppendFormat(@"\cf{0}", cf);
             if (cb >= 0)
-                tags.AppendFormat(@"\highlight{0}", cb);
+                _ = tags.AppendFormat(@"\highlight{0}", cb);
             if(!string.IsNullOrEmpty(desc.AdditionalTags))
-                tags.Append(desc.AdditionalTags.Trim());
+                _ = tags.Append(desc.AdditionalTags.Trim());
 
             if(tags.Length > 0)
-                sb.AppendFormat(@"{{{0} {1}}}", tags, tempSB.ToString());
+                _ = sb.AppendFormat(@"{{{0} {1}}}", tags, tempSB.ToString());
             else
-                sb.Append(tempSB.ToString());
+                _ = sb.Append(tempSB);
             tempSB.Length = 0;
         }
 
@@ -212,6 +199,6 @@ namespace FastColoredTextBoxNS
     {
         public Color ForeColor { get; set; }
         public Color BackColor { get; set; }
-        public string AdditionalTags { get; set; }
+        public string? AdditionalTags { get; set; }
     }
 }

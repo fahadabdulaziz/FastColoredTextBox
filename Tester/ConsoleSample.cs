@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
@@ -38,7 +39,7 @@ namespace Tester
             base.OnClosing(e);
         }
 
-        void Stop()
+        private void Stop()
         {
             stop = true;
             consoleTextBox1.IsReadLineMode = false;

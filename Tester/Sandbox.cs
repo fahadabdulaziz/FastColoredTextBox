@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using System.Linq;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
@@ -22,7 +23,7 @@ namespace Tester
             fctb.SelectedText = "new line value";
         }
 
-        private ColorStyle colorStyle = new ColorStyle(Brushes.Black, Brushes.White, FontStyle.Regular);
+        private readonly ColorStyle colorStyle = new ColorStyle(Brushes.Black, Brushes.White, FontStyle.Regular);
 
         private void fctb_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -30,7 +31,7 @@ namespace Tester
         }
     }
 
-    class ColorStyle : TextStyle
+    internal class ColorStyle : TextStyle
     {
         public ColorStyle(Brush foreBrush, Brush backgroundBrush, FontStyle fontStyle) : base(foreBrush, backgroundBrush, fontStyle)
         {
@@ -47,7 +48,7 @@ namespace Tester
         }
     }
 
-    class MyFCTB : FastColoredTextBox
+    internal class MyFCTB : FastColoredTextBox
     {
         protected override void OnMouseMove(MouseEventArgs e)
         {

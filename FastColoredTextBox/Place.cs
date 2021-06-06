@@ -27,9 +27,9 @@ namespace FastColoredTextBoxNS
             return iChar == other.iChar && iLine == other.iLine;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
         {
-            return (obj is Place) && Equals((Place)obj);
+            return (obj is Place place) && Equals(place);
         }
 
         public override int GetHashCode()

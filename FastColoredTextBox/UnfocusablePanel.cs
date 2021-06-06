@@ -30,11 +30,13 @@ namespace FastColoredTextBoxNS
 
             if (!string.IsNullOrEmpty(Text))
             {
-                StringFormat sf = new StringFormat();
-                sf.Alignment = TextAlignment;
-                sf.LineAlignment = StringAlignment.Center;
-                using(var brush = new SolidBrush(ForeColor))
-                    e.Graphics.DrawString(Text, Font, brush, new RectangleF(1, 1, ClientSize.Width - 2, ClientSize.Height - 2), sf);
+                StringFormat sf = new StringFormat
+                {
+                    Alignment = TextAlignment,
+                    LineAlignment = StringAlignment.Center
+                };
+                using var brush = new SolidBrush(ForeColor);
+                e.Graphics.DrawString(Text, Font, brush, new RectangleF(1, 1, ClientSize.Width - 2, ClientSize.Height - 2), sf);
             }
         }
     }

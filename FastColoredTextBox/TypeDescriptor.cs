@@ -7,7 +7,7 @@ namespace FastColoredTextBoxNS
     ///
     /// These classes are required for correct data binding to Text property of FastColoredTextbox
     /// 
-    class FCTBDescriptionProvider : TypeDescriptionProvider
+    internal class FCTBDescriptionProvider : TypeDescriptionProvider
     {
         public FCTBDescriptionProvider(Type type)
             : base(GetDefaultTypeProvider(type))
@@ -28,10 +28,10 @@ namespace FastColoredTextBoxNS
         }
     }
 
-    class FCTBTypeDescriptor : CustomTypeDescriptor
+    internal class FCTBTypeDescriptor : CustomTypeDescriptor
     {
-        ICustomTypeDescriptor parent;
-        object instance;
+        private readonly ICustomTypeDescriptor parent;
+        private readonly object instance;
 
         public FCTBTypeDescriptor(ICustomTypeDescriptor parent, object instance)
             : base(parent)
@@ -40,10 +40,10 @@ namespace FastColoredTextBoxNS
             this.instance = instance;
         }
 
-        public override string GetComponentName()
+        public override string? GetComponentName()
         {
-            var ctrl = (instance as Control);
-            return ctrl == null ? null : ctrl.Name;
+            var ctrl = instance as Control;
+            return ctrl?.Name;
         }
 
         public override EventDescriptorCollection GetEvents()
@@ -61,7 +61,7 @@ namespace FastColoredTextBoxNS
         }
     }
 
-    class FooTextChangedDescriptor : EventDescriptor
+    internal class FooTextChangedDescriptor : EventDescriptor
     {
         public FooTextChangedDescriptor(MemberDescriptor desc)
             : base(desc)
@@ -70,7 +70,7 @@ namespace FastColoredTextBoxNS
 
         public override void AddEventHandler(object component, Delegate value)
         {
-            (component as FastColoredTextBox).BindingTextChanged += value as EventHandler;
+            ((FastColoredTextBox)component).BindingTextChanged += value as EventHandler;
         }
 
         public override Type ComponentType
@@ -90,7 +90,7 @@ namespace FastColoredTextBoxNS
 
         public override void RemoveEventHandler(object component, Delegate value)
         {
-            (component as FastColoredTextBox).BindingTextChanged -= value as EventHandler;
+            ((FastColoredTextBox)component).BindingTextChanged -= value as EventHandler;
         }
     }
 }

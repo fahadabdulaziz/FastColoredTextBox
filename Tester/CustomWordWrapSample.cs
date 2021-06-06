@@ -12,7 +12,7 @@ namespace Tester
             InitializeComponent();
         }
 
-        private Regex regex = new Regex(@"&&|&|\|\||\|");
+        private readonly Regex regex = new Regex(@"&&|&|\|\||\|");
 
         private void fctb_WordWrapNeeded(object sender, WordWrapNeededEventArgs e)
         {

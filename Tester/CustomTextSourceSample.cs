@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
@@ -14,14 +15,14 @@ namespace Tester
             InitializeComponent();
         }
 
-        private string CreateExtraLargeString()
+        private static string CreateExtraLargeString()
         {
             var sb = new StringBuilder();
             var dt = DateTime.Now;
             for (int i = 0; i < 500000; i++)
             {
-                sb.AppendFormat("{0}  POST http://mysite.com/{1}.aspx HTTP1.0\n", dt.AddSeconds(i), i % 20);
-                sb.AppendFormat("{0}  GET http://myothersite.com/{1}.aspx HTTP1.1\n", dt.AddSeconds(i), i % 20);
+                _ = sb.AppendFormat("{0}  POST http://mysite.com/{1}.aspx HTTP1.0\n", dt.AddSeconds(i), i % 20);
+                _ = sb.AppendFormat("{0}  GET http://myothersite.com/{1}.aspx HTTP1.1\n", dt.AddSeconds(i), i % 20);
             }
 
             return sb.ToString();
@@ -30,7 +31,7 @@ namespace Tester
         private void CustomTextSourceSample_Shown(object sender, EventArgs e)
         {
             var s = CreateExtraLargeString();
-            MessageBox.Show("Extralarge string is created.\nPress OK to assign string to the FastColoredTextbox");
+            _ = MessageBox.Show("Extralarge string is created.\nPress OK to assign string to the FastColoredTextbox");
             //create our custom TextSource
             var ts = new StringTextSource(fctb);
             //open source string
@@ -54,9 +55,9 @@ namespace Tester
     /// </summary>
     public class StringTextSource : TextSource, IDisposable
     {
-        List<int> sourceStringLinePositions = new List<int>();
-        string sourceString;
-        System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+        private readonly List<int> sourceStringLinePositions = new List<int>();
+        private string sourceString;
+        private readonly Timer timer = new Timer();
 
         public StringTextSource(FastColoredTextBox tb)
             : base(tb)
@@ -66,7 +67,7 @@ namespace Tester
             timer.Enabled = true;
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        private void timer_Tick(object sender, EventArgs e)
         {
             timer.Enabled = false;
             try
@@ -154,7 +155,7 @@ namespace Tester
 
             string s;
             if(i == Count - 1)
-                s = sourceString.Substring(sourceStringLinePositions[i]);
+                s = sourceString[sourceStringLinePositions[i]..];
             else
                 s = sourceString.Substring(sourceStringLinePositions[i], sourceStringLinePositions[i + 1] - sourceStringLinePositions[i] - 1);
 

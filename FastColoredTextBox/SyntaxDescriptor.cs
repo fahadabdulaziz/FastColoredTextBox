@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System;
 
 namespace FastColoredTextBoxNS
 {
-    public class SyntaxDescriptor: IDisposable
+    public class SyntaxDescriptor : IDisposable
     {
         public char leftBracket = '(';
         public char rightBracket = ')';
@@ -19,33 +19,40 @@ namespace FastColoredTextBoxNS
         {
             foreach (var style in styles)
                 style.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 
     public class RuleDesc
     {
-        Regex regex;
-        public string pattern;
-        public RegexOptions options = RegexOptions.None;
-        public Style style;
+        private Regex? regex;
+        private string? pattern;
+        private RegexOptions options = RegexOptions.None;
+        private Style? style;
 
         public Regex Regex
         {
             get
             {
                 if (regex == null)
-                {
-                    regex = new Regex(pattern, SyntaxHighlighter.RegexCompiledOption | options);
-                }
+                    regex = new Regex(Pattern!, SyntaxHighlighter.RegexCompiledOption | Options);
                 return regex;
             }
         }
+
+        public string? Pattern { get => pattern; set => pattern = value; }
+        public RegexOptions Options { get => options; set => options = value; }
+        public Style? Style { get => style; set => style = value; }
     }
 
     public class FoldingDesc
     {
-        public string startMarkerRegex;
-        public string finishMarkerRegex;
-        public RegexOptions options = RegexOptions.None;
+        private string? startMarkerRegex;
+        private string? finishMarkerRegex;
+        private RegexOptions options = RegexOptions.None;
+
+        public string? StartMarkerRegex { get => startMarkerRegex; set => startMarkerRegex = value; }
+        public string? FinishMarkerRegex { get => finishMarkerRegex; set => finishMarkerRegex = value; }
+        public RegexOptions Options { get => options; set => options = value; }
     }
 }

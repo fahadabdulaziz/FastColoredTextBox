@@ -6,9 +6,9 @@ namespace FastColoredTextBoxNS
 {
     public class LinesAccessor : IList<string>
     {
-        IList<Line> ts;
+        private readonly IList<Line?> ts;
 
-        public LinesAccessor(IList<Line> ts)
+        public LinesAccessor(IList<Line?> ts)
         {
             this.ts = ts;
         }

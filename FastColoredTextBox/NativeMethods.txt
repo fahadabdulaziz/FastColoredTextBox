@@ -1,0 +1,6 @@
+﻿ImmGetContext
+ImmAssociateContext
+WM_IME_SETCONTEXT
+WM_HSCROLL
+WM_VSCROLL
+SB_ENDSCROLL

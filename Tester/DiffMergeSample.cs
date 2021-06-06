@@ -7,14 +7,15 @@ using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using Tester.DiffMergeStuffs;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
     public partial class DiffMergeSample : Form
     {
-        int updating;
-        Style greenStyle;
-        Style redStyle;
+        private int updating;
+        private Style greenStyle;
+        private Style redStyle;
 
         public DiffMergeSample()
         {
@@ -37,7 +38,7 @@ namespace Tester
                 tbFirstFile.Text = ofdFile.FileName;
         }
 
-        void tb_VisibleRangeChanged(object sender, EventArgs e)
+        private void tb_VisibleRangeChanged(object sender, EventArgs e)
         {
             if (updating > 0)
                 return;
@@ -54,7 +55,7 @@ namespace Tester
             fctb2.Refresh();
         }
 
-        void UpdateScroll(FastColoredTextBox tb, int vPos, int curLine)
+        private void UpdateScroll(FastColoredTextBox tb, int vPos, int curLine)
         {
             if (updating > 0)
                 return;
@@ -87,7 +88,7 @@ namespace Tester
         {
             if (!File.Exists(tbFirstFile.Text) && !File.Exists(tbSecondFile.Text))
             {
-                MessageBox.Show(this,"Please select a valid file", "Invalid file");
+                _ = MessageBox.Show(this, "Please select a valid file", "Invalid file");
                 return;
             }
 
@@ -146,8 +147,8 @@ namespace Tester
     {
         public class SimpleDiff<T>
         {
-            private IList<T> _left;
-            private IList<T> _right;
+            private readonly IList<T> _left;
+            private readonly IList<T> _right;
             private int[,] _matrix;
             private bool _matrixCreated;
             private int _preSkip;
@@ -182,7 +183,7 @@ namespace Tester
                     CalculatePostSkip();
                     CreateLCSMatrix();
                     sw.Stop();
-                    this.ElapsedTime = sw.Elapsed;
+                    ElapsedTime = sw.Elapsed;
                 }
 
                 for (int i = 0; i < _preSkip; i++)
@@ -310,7 +311,7 @@ namespace Tester
 
             private void FireLineUpdate(DiffType diffType, int leftIndex, int rightIndex)
             {
-                var local = this.LineUpdate;
+                var local = LineUpdate;
 
                 if (local == null)
                     return;
@@ -323,7 +324,7 @@ namespace Tester
             private void InitializeCompareFunc()
             {
                 // Special case for String types
-                if (typeof (T) == typeof (String))
+                if (typeof (T) == typeof (string))
                 {
                     _compareFunc = StringCompare;
                 }
@@ -343,7 +344,7 @@ namespace Tester
             /// <returns></returns>
             private bool StringCompare(T left, T right)
             {
-                return Object.Equals(left, right);
+                return Equals(left, right);
             }
 
             private bool DefaultCompare(T left, T right)
@@ -370,10 +371,10 @@ namespace Tester
 
             public DiffEventArgs(DiffType diffType, T lineValue, int leftIndex, int rightIndex)
             {
-                this.DiffType = diffType;
-                this.LineValue = lineValue;
-                this.LeftIndex = leftIndex;
-                this.RightIndex = rightIndex;
+                DiffType = diffType;
+                LineValue = lineValue;
+                LeftIndex = leftIndex;
+                RightIndex = rightIndex;
             }
         }
 
@@ -407,17 +408,17 @@ namespace Tester
             /// </summary>
             public override bool Equals(object obj)
             {
-                return Object.Equals(line, ((Line) obj).line);
+                return Equals(line, ((Line) obj).line);
             }
 
             public static bool operator ==(Line line1, Line line2)
             {
-                return Object.Equals(line1.line, line2.line);
+                return Equals(line1.line, line2.line);
             }
 
             public static bool operator !=(Line line1, Line line2)
             {
-                return !Object.Equals(line1.line, line2.line);
+                return !Equals(line1.line, line2.line);
             }
 
             public override string ToString()
@@ -508,7 +509,7 @@ namespace Tester
             /// </summary>
             public Lines Clone()
             {
-                Lines result = new Lines(this.Count);
+                Lines result = new Lines(Count);
                 foreach (var line in this)
                     result.Add(new Line(line.line));
 
