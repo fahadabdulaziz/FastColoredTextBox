@@ -1,4 +1,5 @@
-﻿ImmGetContext
+﻿HIMC
+ImmGetContext
 ImmAssociateContext
 WM_IME_SETCONTEXT
 WM_HSCROLL

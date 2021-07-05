@@ -35,7 +35,9 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Microsoft.Win32;
-using Microsoft.Windows.Sdk;
+using Windows.Win32;
+using Windows.Win32.Globalization;
+using Windows.Win32.Foundation;
 using Timer = System.Windows.Forms.Timer;
 
 namespace FastColoredTextBoxNS
