@@ -4,11 +4,11 @@
     <AssemblyName>FastColoredTextBox</AssemblyName>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyVersion>2.16.27.100</AssemblyVersion>
-    <FileVersion>2.16.27.100</FileVersion>
+    <AssemblyVersion>2.16.30.100</AssemblyVersion>
+    <FileVersion>2.16.30.100</FileVersion>
     <Configurations>Debug;Release</Configurations>
     <PackageId>FastColoredTextBox-net5</PackageId>
-    <Version>2.17.27.100</Version>
+    <Version>2.17.30.100</Version>
     <Authors>Pavel Torgashov, Fahad Alshaya, Sara LaFleur</Authors>
     <Company>Pavel Torgashov</Company>
     <Description>Fast сolored textbox control</Description>
